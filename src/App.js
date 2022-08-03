@@ -8,10 +8,10 @@ import { CgProfile } from "react-icons/cg"
 import styled from 'styled-components';
 import ChatBackground from "./Images/chatbackGround.jpg"
 import { useState } from 'react';
-import { GiCaptainHatProfile } from "react-icons/gi"
+import { GiCaptainHatProfile, GiConsoleController } from "react-icons/gi"
 import { ImKey, ImProfile } from "react-icons/im"
 import Modal from "react-modal"
-
+import axios from 'axios';
 
 
 
@@ -133,13 +133,15 @@ color:white;
 `
 
 const MainRightHeaderRight = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-padding:10px;
-
-`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #128c72;
+  border-top-left-radius:10px ;
+  border-bottom-left-radius:10px;
+`;
 
 const IconDiv = styled.div`
 margin-left: 15px;
@@ -157,12 +159,10 @@ const Linediv = styled.div`
 
 
 const ButtonsContainer = styled.div`
-display: flex;
-flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-
-
-`
+`;
 
 const Button = styled.button`
 padding:10px 15px;
@@ -191,7 +191,7 @@ const ProfileButton = styled.button`
 
 const ModalContainer = styled.div`
 display: flex;
-height: 325px;
+height: 350px;
 width: 280px;
 background-color: black;
 flex-direction: column;
@@ -300,6 +300,24 @@ const customStyles = {
   },
 };
 
+const FailureParagraph = styled.p`
+  margin:0px;
+
+  color:red;
+
+`
+
+
+const SuccessParagraph = styled.p`
+  color: green;
+`;
+
+const FailureInfoBox = styled.div`
+display: flex;
+justify-content: center;
+`
+
+
 
 
 
@@ -311,17 +329,85 @@ function App() {
 
 
   
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(0);
 
 
   const [registerModal, setRegisterModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [registerInfo, setRegisterInfo] = useState("");
+  const [loginInfo, setLoginInfo] = useState("");
 
 
-   function Login() {
+   /* function Login() {
      closeLoginModal();
      setLogin(true);
-   }
+   } */
+  
+  const Login = () => {
+    
+    console.log(number);
+    console.log(password);
+    axios.post(`http://localhost:9090/knk/register?number=${number}&password=${password}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data!=0) {
+          console.log("check1")
+          console.log(res.data);
+          closeLoginModal();
+          setLogin(res.data);
+
+        }
+        else {
+          setLoginInfo("please check your credentials")
+          
+        }
+    })
+     closeLoginModal();
+     setLogin(true);
+
+
+  }
+  
+  
+  const Register = () => {
+
+    console.log(number);
+    console.log(password);
+    axios.post(
+      `http://localhost:9090/knk/register?number=${number}&password=${password}`
+    )
+      .then((res) => {
+        console.log(res);
+        /* true or false */
+        /* setRegisterInfo(res.data); */
+        if (res.data===1) {
+          console.log("check1")
+          console.log(res.data);
+          
+          closeRegisterModal();
+          openLoginModal();
+          
+        }
+        else {
+          console.log("check2")
+          console.log(res.data);
+          setRegisterInfo("user already existed")
+
+
+          
+        }
+
+      
+    })
+      .catch((e) => {
+        console.log(e);
+      })
+
+
+    
+  }
 
   function openRegisterModal() {
     setRegisterModal(true);
@@ -469,20 +555,7 @@ function App() {
                 </ButtonsContainer>
               )}
 
-              {/* <IconDiv>
-                <AiOutlineVideoCamera size="25px" color="white" />
-              </IconDiv>
-              <IconDiv>
-                <IoCallOutline size="25px" color="white" />
-              </IconDiv>
-              <Linediv></Linediv>
-              <IconDiv>
-                <IoSearchSharp size="25px" color="white" />
-              </IconDiv>
-
-              <IconDiv>
-                <BiDotsHorizontalRounded size="25px" color="white" />
-              </IconDiv> */}
+              
             </MainRightHeaderRight>
           </MainRightHeader>
 
@@ -496,6 +569,7 @@ function App() {
         </MainRight>
       </MainBody>
       {/* Modal for Registration */}
+
       <Modal
         isOpen={registerModal}
         onRequestClose={closeRegisterModal}
@@ -508,21 +582,41 @@ function App() {
           <LabelContainer>
             <H5white>Phone Number</H5white>
           </LabelContainer>
+
           <ModalInputContainer>
-            <ModalInput></ModalInput>
+            <ModalInput
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
+            ></ModalInput>
           </ModalInputContainer>
+
           <LabelContainer>
-            <H5white>Phone Number</H5white>
+            <H5white>Passwrod</H5white>
           </LabelContainer>
           <ModalInputContainer>
-            <ModalInput></ModalInput>
+            <ModalInput
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            ></ModalInput>
           </ModalInputContainer>
 
           <ModalButttonContainer>
-            <ModalButton>Register</ModalButton>
+            <ModalButton
+              onClick={() => {
+                Register();
+              }}
+            >
+              Register
+            </ModalButton>
           </ModalButttonContainer>
+          <FailureInfoBox>
+            <FailureParagraph>{registerInfo}</FailureParagraph>
+          </FailureInfoBox>
         </ModalContainer>
       </Modal>
+
       {/* Modal for Login */}
 
       <Modal
@@ -532,7 +626,7 @@ function App() {
       >
         <ModalContainer>
           <ModalHeadingContainer>
-            <H3white>REGISTRATION</H3white>
+            <H3white>LOGIN</H3white>
           </ModalHeadingContainer>
           <LabelContainer>
             <H5white>Phone Number</H5white>
@@ -548,7 +642,13 @@ function App() {
           </ModalInputContainer>
 
           <ModalButttonContainer>
-            <ModalButton onClick={()=>{Login()}}>Login</ModalButton>
+            <ModalButton
+              onClick={() => {
+                Login();
+              }}
+            >
+              Login
+            </ModalButton>
           </ModalButttonContainer>
         </ModalContainer>
       </Modal>
