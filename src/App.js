@@ -506,21 +506,36 @@ const MsgsEditorTextBox = styled.input`
 `;
 
 
-const OneChat = () => {
-  
+const MessagesAll = styled.div`
 
-  return (
-    <div>
-      
-      
-  
-  
-  
-    </div>
-  )
+  display: flex;
+  flex-direction: column;
+
+`
+const SomeThingMessage = styled.div`
+display: flex;
 
 
-}
+
+`
+
+
+const LeftMessage = styled.div`
+display:flex;
+background-color: black;
+
+
+
+`
+
+const RightMessage = styled.div`
+display:flex;
+background-color: green;
+
+
+`
+
+
 
 
 
@@ -541,6 +556,9 @@ function App() {
 
   
   const [login, setLogin] = useState(0);
+  const [guest, setGuest] = useState(0);
+  const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
+
 
 
   const [registerModal, setRegisterModal] = useState(false);
@@ -568,7 +586,7 @@ function App() {
        setRecentMessages(res.data);
      };
      RecentMessages();
-   }, [login, recentMessages]);
+   }, [login]);
   
   const Login = () => {
     
@@ -637,6 +655,31 @@ function App() {
     
   }
 
+  const onChat=async(guest_num) => {
+  
+    /* console.log(guest);
+    
+    
+    */
+    console.log(guest_num);
+    console.log(login);
+    
+
+
+    const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
+    setmessagesDataOneToOne(res.data);
+    console.log(res);
+      setGuest(guest_num);
+
+
+
+
+
+
+  }
+
+
+
   function openRegisterModal() {
     setRegisterModal(true);
   }
@@ -701,16 +744,17 @@ function App() {
 
             <ChatsBody>
               {recentMessages.map((d) => (
-                <ChatCard>
+                <ChatCard
+                  onClick={() => {
+                    onChat(d);
+                  }}
+                >
                   <ChatCardProfile>
-                    <CgProfile size={50}/>
-                  
+                    <CgProfile size={50} />
                   </ChatCardProfile>
                   <ChatCardNumber>
                     <H5white>{d}</H5white>
                   </ChatCardNumber>
-
-                  
                 </ChatCard>
               ))}
             </ChatsBody>
@@ -760,27 +804,39 @@ function App() {
                 backgroundImage: `url(${ChatBackground})`,
                 width: "100%",
                 height: "100%",
-                  position: "static",
-                  display: "flex",
-                  flexDirection: "column",
-                  
-
-                
+                position: "static",
+                display: "flex",
+                flexDirection: "column",
               }}
-              >
-                <MsgsBody>
-                </MsgsBody>
-                <MsgsEditor>
-                  <MsgsEditorTextBox>
-                  </MsgsEditorTextBox>
-                </MsgsEditor>
-                
-                
+            >
+              <MsgsBody>
+                {guest !== 0 ? (
+                  <MessagesAll>
+                    <h1>Hello</h1>
+                      {messagesDataOneToOne.map((msg) => (
+
+                       
+                        <div>
+                          
+                          {msg.data}
+                        </div>
+                        
+                      
 
 
-                
-                
-              </div>
+
+                    ))}
+                  </MessagesAll>
+                ) : (
+                  <SomeThingMessage>
+                    <h1>Hello there</h1>
+                  </SomeThingMessage>
+                )}
+              </MsgsBody>
+              <MsgsEditor>
+                <MsgsEditorTextBox></MsgsEditorTextBox>
+              </MsgsEditor>
+            </div>
           </MainRight>
         </MainBody>
       )}
