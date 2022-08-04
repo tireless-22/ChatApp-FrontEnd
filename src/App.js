@@ -301,10 +301,15 @@ font-size: 24px;
 border: 0px;
 margin:10px;
 
-
-
-
 `
+const H4white = styled.h3`
+  color: white;
+  font-weight: 400;
+  font-size: 20px;
+  border: 0px;
+  margin: 10px;
+`;
+
 
 const ModalInputContainer = styled.div`
 
@@ -510,6 +515,7 @@ const MessagesAll = styled.div`
 
   display: flex;
   flex-direction: column;
+  position: relative;
 
 `
 const SomeThingMessage = styled.div`
@@ -521,19 +527,35 @@ display: flex;
 
 
 const LeftMessage = styled.div`
-display:flex;
-background-color: black;
+
+  background-color: #202c33;
+  color: white;
+  margin: 5px 0px;
+  padding-right: 10px;
+  border-radius: 10px;
+  margin-left:5%;
+  max-width: 60%;
+  padding:5px;
+  float: left;
+  
 
 
 
-`
+
+
+`;
 
 const RightMessage = styled.div`
-display:flex;
-background-color: green;
+  padding-left: 10px;
+  background-color: #128c72;
+  margin: 5px 0px;
 
+  float: right;
+  margin-right: 5%;
+  border-radius: 10px;
 
-`
+  max-width: 60%;
+`;
 
 
 
@@ -669,7 +691,8 @@ function App() {
     const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
     setmessagesDataOneToOne(res.data);
     console.log(res);
-      setGuest(guest_num);
+    setGuest(guest_num);
+    console.log(typeof(login))
 
 
 
@@ -753,7 +776,7 @@ function App() {
                     <CgProfile size={50} />
                   </ChatCardProfile>
                   <ChatCardNumber>
-                    <H5white>{d}</H5white>
+                    <H4white>{d}</H4white>
                   </ChatCardNumber>
                 </ChatCard>
               ))}
@@ -798,12 +821,16 @@ function App() {
                 )}
               </MainRightHeaderRight>
             </MainRightHeader>
-
             <div
-              style={{
+                style={{
+                overflowX: "hidden",
+             
+                flex: 11,
+              
                 backgroundImage: `url(${ChatBackground})`,
-                width: "100%",
-                height: "100%",
+              width: "100%",
+              
+              
                 position: "static",
                 display: "flex",
                 flexDirection: "column",
@@ -812,19 +839,18 @@ function App() {
               <MsgsBody>
                 {guest !== 0 ? (
                   <MessagesAll>
-                    <h1>Hello</h1>
-                      {messagesDataOneToOne.map((msg) => (
-
-                       
-                        <div>
-                          
-                          {msg.data}
-                        </div>
-                        
-                      
-
-
-
+                    {messagesDataOneToOne.map((msg) => (
+                      <div>
+                        {parseInt(msg.sender_id) === login ? (
+                          <RightMessage>
+                            <H4white>{msg.data}</H4white>
+                          </RightMessage>
+                        ) : (
+                          <LeftMessage>
+                            <H4white>{msg.data}</H4white>
+                          </LeftMessage>
+                        )}
+                      </div>
                     ))}
                   </MessagesAll>
                 ) : (
@@ -833,10 +859,11 @@ function App() {
                   </SomeThingMessage>
                 )}
               </MsgsBody>
-              <MsgsEditor>
-                <MsgsEditorTextBox></MsgsEditorTextBox>
-              </MsgsEditor>
             </div>
+            
+            <MsgsEditor>
+              <MsgsEditorTextBox></MsgsEditorTextBox>
+            </MsgsEditor>
           </MainRight>
         </MainBody>
       )}
