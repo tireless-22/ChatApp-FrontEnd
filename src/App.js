@@ -7,11 +7,14 @@ import { CgProfile } from "react-icons/cg"
 // import { BiDotsHorizontalRounded } from "react-icons/bi";
 import styled from 'styled-components';
 import ChatBackground from "./Images/chatbackGround.jpg"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GiCaptainHatProfile, GiConsoleController } from "react-icons/gi"
 import { ImKey, ImProfile } from "react-icons/im"
 import Modal from "react-modal"
 import axios from 'axios';
+
+import CoverImagePhoto from "./Images/coverCheck.jpg"
+
 
 
 
@@ -20,6 +23,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   height: 100vh;
   width:100vw;
+  position: static;
 
 `
 
@@ -40,19 +44,60 @@ const MainLeft = styled.div`
   display: flex;
   flex-direction: column;
   background-color: black;
-  height: 100%;
+  height: 100vh;
   border-right: 2px white solid;
 `;
 const MainLeftHeader = styled.div`
-height: 60px;
-background-color: #3a3b3c;
-justify-content: center;
+height:60px;
+display: flex;
+flex-direction: row;
+/* justify-content: left; */
+/* flex:1; */
+background-color: #202c33;
+/* justify-content: center; */
 align-items: center;
 `
+const OneToOneDiv = styled.div`
+display: flex;
+flex: 1;
+border-right:1px solid white;
+height: 100%;
+justify-content: center;
+align-items: center;
+color:white;
+
+
+
+`
+const OneToOneButton = -styled.button`
+height: 30px;
+
+
+
+
+`
+
+const GroupsDiv = styled.div`
+display: flex;
+flex:1;
+justify-content: center;
+align-items: center;
+color:white;
+
+
+
+`
+const GroupButton = styled.button`
+height: 30px;
+
+`
+
 
 const MainLeftBody = styled.div`
-height: 100%;
+/* height: ; */
+/* flex:8; */
 display: flex;
+max-height:inherit;
 flex-direction: column;
 
 background-color:gray;
@@ -65,6 +110,7 @@ align-items: center;
 justify-content: center;
 background-color: black;
 border-bottom: 1px solid white;
+/* flex:1; */
 
 height:50px ;
 `
@@ -85,23 +131,60 @@ background-color: #040720;
 `
 
 const ChatsBody = styled.div`
-height: 100%;
-background-color: black;
-/* overflow: scroll; */
+  /* height: 100%; */
+  position: static;
+  /* overflow-x: scroll; */
+  overflow-x: hidden;
+  /* overflow-y:hidden; */
+  background-color: #111b21;
+  /* -webkit-scrollbar:none ; */
+  flex: 11;
+  /* overflow: scroll; */
 
-
-
-`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const ChatCard = styled.div`
-height: 50px;
-background-color: black;
-border-bottom:2px solid white;
-width: 100%;
-color:white;
+  height: 70px;
+  background-color: #111b21;
+  /* border-bottom:2px solid white; */
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: left;
+  align-items: center;
+`;
+const ChatCardProfile = styled.div`
+display: flex;
+align-items: center;
+height: 100%;
+flex:1;
+
+
+
 
 
 `
+const ChatCardNumber = styled.div`
+display: flex;
+align-items: center;
+height: 100%;
+flex:4;
+border-bottom : 0.5px solid gray;
+
+
+
+
+
+
+`
+
+
+
+
+
 
 
 
@@ -111,12 +194,13 @@ const MainRight = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* position:static; */
   /* border: 1px white solid; */
 `;
 
 const MainRightHeader = styled.div`
   height: 60px;
-  background-color: #3a3b3c;
+  background-color: #202c33;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -318,6 +402,131 @@ justify-content: center;
 `
 
 
+const MsgTextBoxDiv = styled.div`
+display:flex;
+
+
+
+
+`
+
+const MsgTextBox = styled.div`
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 10px;
+  
+`;
+
+
+
+const CoverPage = styled.div`
+display: flex;
+flex-direction:row;
+
+
+
+
+
+
+`
+
+const CoverPhoto = styled.div`
+display: flex;
+flex:7;
+
+
+
+
+`
+
+const CoverImage = styled.img`
+height: 100vh;
+width: 100%;
+
+
+
+`
+
+const CoverRegisterAndLogin = styled.div`
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3a3b3c;
+  flex-direction: column;
+`;
+
+const CoverLoginButton = styled.button`
+  width: 90%;
+  height: 50px;
+  border-radius: 15px;
+  color: white;
+  background-color: #128c72;
+`;
+const CoverRegisterButton = styled.button`
+  width: 90%;
+  height: 50px;
+  border-radius: 15px;
+  color: white;
+  background-color: #128c72;
+  margin-bottom: 40px;
+`;
+
+const MsgsBody = styled.div`
+
+  position: static;
+
+  overflow-x: hidden;
+
+  /* background-color: blue; */
+  
+
+  flex: 11;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const MsgsEditor = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  background-color: #202c33;
+  align-items: center;
+`;
+
+const MsgsEditorTextBox = styled.input`
+  height: 40px;
+  width: 95%;
+  background-color: #343f46;
+  color: white;
+  border: 1px solid black;
+  border-radius: 9px;
+`;
+
+
+const OneChat = () => {
+  
+
+  return (
+    <div>
+      
+      
+  
+  
+  
+    </div>
+  )
+
+
+}
+
+
+
+
+
+
 
 
 
@@ -326,6 +535,8 @@ justify-content: center;
 
 
 function App() {
+
+ 
 
 
   
@@ -345,14 +556,28 @@ function App() {
      setLogin(true);
    } */
   
+  
+  
+   const [recentMessages, setRecentMessages] = useState();
+
+   useEffect(() => {
+     const RecentMessages = async () => {
+       const res = await axios.get(
+         `http://localhost:9090/knk/recent?number=${login}`
+       );
+       setRecentMessages(res.data);
+     };
+     RecentMessages();
+   }, [login, recentMessages]);
+  
   const Login = () => {
     
     console.log(number);
     console.log(password);
-    axios.post(`http://localhost:9090/knk/register?number=${number}&password=${password}`)
+    axios.post(`http://localhost:9090/knk/login?number=${number}&password=${password}`)
       .then((res) => {
         console.log(res);
-        if (res.data!=0) {
+        if (res.data!==0) {
           console.log("check1")
           console.log(res.data);
           closeLoginModal();
@@ -360,15 +585,18 @@ function App() {
 
         }
         else {
+          console.log("check2")
           setLoginInfo("please check your credentials")
           
         }
     })
      closeLoginModal();
-     setLogin(true);
+     /* setLogin(); */
 
 
   }
+
+
   
   
   const Register = () => {
@@ -427,147 +655,136 @@ function App() {
   function closeLoginModal() {
     setLoginModal(false);
   }
+  console.log(login)
 
 
 
 
-  const LeftNavUser = [
-    {
-      id: 1,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 2,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 3,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 4,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 5,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 6,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 7,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-    {
-      id: 8,
-      nameOfTheChat: "something",
-      lastMessageUser: "some name",
-      lastMessage: "some message here",
-      lastMessageTime: "22/2/2022",
-    },
-   
-
-  ];
 
 
 
   return (
     <MainContainer>
-      <TopGreen></TopGreen>
-      <MainBody>
-        <MainLeft>
-          <MainLeftHeader>
-            <div>
-              <CgProfile color="white" size="50px" />
-            </div>
-          </MainLeftHeader>
-          <MainLeftBody>
+      {login === 0 ? (
+        <CoverPage>
+          <CoverPhoto>
+            <CoverImage src={CoverImagePhoto} />
+          </CoverPhoto>
+
+          <CoverRegisterAndLogin>
+            <CoverRegisterButton
+              onClick={() => {
+                openRegisterModal();
+              }}
+            >
+              Register
+            </CoverRegisterButton>
+            <CoverLoginButton
+              onClick={() => {
+                openLoginModal();
+              }}
+            >
+              Login
+            </CoverLoginButton>
+          </CoverRegisterAndLogin>
+        </CoverPage>
+      ) : (
+        <MainBody>
+          <MainLeft>
+            <MainLeftHeader>
+              <OneToOneDiv>1-1 Chats</OneToOneDiv>
+              <GroupsDiv>Group Chats</GroupsDiv>
+            </MainLeftHeader>
             <SeachbarDiv>
               <InputBox placeholder=" Search your contacts here"></InputBox>
             </SeachbarDiv>
+
             <ChatsBody>
-              {LeftNavUser.map((d) => (
+              {recentMessages.map((d) => (
                 <ChatCard>
-                  <p>{d.nameOfTheChat}</p>
+                  <ChatCardProfile>
+                    <CgProfile size={50}/>
+                  
+                  </ChatCardProfile>
+                  <ChatCardNumber>
+                    <H5white>{d}</H5white>
+                  </ChatCardNumber>
+
+                  
                 </ChatCard>
               ))}
             </ChatsBody>
-          </MainLeftBody>
-        </MainLeft>
-        <MainRight>
-          <MainRightHeader>
-            <MainRightHeaderLeft>
-              <CgProfile color="white" size="50px" />
-              <MainRightHeaderLeftName>
-                <p>name here</p>
-              </MainRightHeaderLeftName>
-            </MainRightHeaderLeft>
-            <MainRightHeaderRight>
-              {login ? (
-                <ButtonsContainer>
-                  {/* if logged in */}
-                  <ProfileButton>
-                    <ImProfile color="white"></ImProfile>
-                    Profile
-                  </ProfileButton>
-                  <Button onClick={() => setLogin(false)}>Logout</Button>
-                </ButtonsContainer>
-              ) : (
-                <ButtonsContainer>
-                  <Button
-                    onClick={() => {
-                      openRegisterModal();
-                    }}
-                  >
-                    Register
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      openLoginModal();
-                    }}
-                  >
-                    Login
-                  </Button>
-                  {/* if not logged in */}
-                </ButtonsContainer>
-              )}
+          </MainLeft>
+          <MainRight>
+            <MainRightHeader>
+              <MainRightHeaderLeft>
+                <CgProfile color="white" size="50px" />
+                <MainRightHeaderLeftName>
+                  <p>name here</p>
+                </MainRightHeaderLeftName>
+              </MainRightHeaderLeft>
+              <MainRightHeaderRight>
+                {login !== 0 ? (
+                  <ButtonsContainer>
+                    {/* if logged in */}
+                    <ProfileButton>
+                      <ImProfile color="white"></ImProfile>
+                      {login}
+                    </ProfileButton>
+                    <Button onClick={() => setLogin(0)}>Logout</Button>
+                  </ButtonsContainer>
+                ) : (
+                  <ButtonsContainer>
+                    <Button
+                      onClick={() => {
+                        openRegisterModal();
+                      }}
+                    >
+                      Register
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        openLoginModal();
+                      }}
+                    >
+                      Login
+                    </Button>
+                    {/* if not logged in */}
+                  </ButtonsContainer>
+                )}
+              </MainRightHeaderRight>
+            </MainRightHeader>
 
-              
-            </MainRightHeaderRight>
-          </MainRightHeader>
+            <div
+              style={{
+                backgroundImage: `url(${ChatBackground})`,
+                width: "100%",
+                height: "100%",
+                  position: "static",
+                  display: "flex",
+                  flexDirection: "column",
+                  
 
-          <div
-            style={{
-              backgroundImage: `url(${ChatBackground})`,
-              width: "100%",
-              height: "100%",
-            }}
-          ></div>
-        </MainRight>
-      </MainBody>
+                
+              }}
+              >
+                <MsgsBody>
+                </MsgsBody>
+                <MsgsEditor>
+                  <MsgsEditorTextBox>
+                  </MsgsEditorTextBox>
+                </MsgsEditor>
+                
+                
+
+
+                
+                
+              </div>
+          </MainRight>
+        </MainBody>
+      )}
+
       {/* Modal for Registration */}
 
       <Modal
@@ -632,13 +849,21 @@ function App() {
             <H5white>Phone Number</H5white>
           </LabelContainer>
           <ModalInputContainer>
-            <ModalInput></ModalInput>
+            <ModalInput
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
+            ></ModalInput>
           </ModalInputContainer>
           <LabelContainer>
-            <H5white>Phone Number</H5white>
+            <H5white>Password</H5white>
           </LabelContainer>
           <ModalInputContainer>
-            <ModalInput></ModalInput>
+            <ModalInput
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            ></ModalInput>
           </ModalInputContainer>
 
           <ModalButttonContainer>
