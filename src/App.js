@@ -12,7 +12,8 @@ import { GiCaptainHatProfile, GiConsoleController } from "react-icons/gi"
 import { ImKey, ImProfile } from "react-icons/im"
 import Modal from "react-modal"
 import axios from 'axios';
-
+import {AiOutlineSend} from "react-icons/ai"
+import {IoMdSend} from "react-icons/io"
 import CoverImagePhoto from "./Images/coverCheck.jpg"
 
 
@@ -496,18 +497,32 @@ const MsgsBody = styled.div`
 const MsgsEditor = styled.div`
   flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  
+  justify-content: left;
   background-color: #202c33;
   align-items: center;
 `;
 
 const MsgsEditorTextBox = styled.input`
+margin-left:15px;
   height: 40px;
-  width: 95%;
+  width: 90%;
   background-color: #343f46;
   color: white;
   border: 1px solid black;
   border-radius: 9px;
+`;
+const MsgsEditorSend = styled.div`
+  border-radius: 50%;
+  padding-left:8px ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #128c72;
+  height: 45px;
+  width: 40px;
+  margin-left: 10px;
 `;
 
 
@@ -588,7 +603,8 @@ function App() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [registerInfo, setRegisterInfo] = useState("");
-  const [loginInfo, setLoginInfo] = useState("");
+  const [loginInfo, setLoginInfo] = useState(""); 
+  const [textBoxMessage, setTextBoxMessage] = useState("");
 
 
    /* function Login() {
@@ -721,11 +737,28 @@ function App() {
   function closeLoginModal() {
     setLoginModal(false);
   }
-  console.log(login)
+  /* console.log(login) */
+
+  const sendMessage = async () => {
+    console.log(textBoxMessage);
+    let msg=textBoxMessage.trim()
+    if (msg.length !== 0) {
+        await axios
+          .post(
+            `http://localhost:9090/knk/sendMessage?number=${login}&guest=${guest}&data=${msg}`
+          )
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      
 
 
-
-
+    }
+   
+    }
 
 
 
@@ -822,15 +855,14 @@ function App() {
               </MainRightHeaderRight>
             </MainRightHeader>
             <div
-                style={{
+              style={{
                 overflowX: "hidden",
-             
+
                 flex: 11,
-              
+
                 backgroundImage: `url(${ChatBackground})`,
-              width: "100%",
-              
-              
+                width: "100%",
+
                 position: "static",
                 display: "flex",
                 flexDirection: "column",
@@ -860,16 +892,26 @@ function App() {
                 )}
               </MsgsBody>
             </div>
-            
+
             <MsgsEditor>
-              <MsgsEditorTextBox></MsgsEditorTextBox>
+              <MsgsEditorTextBox
+                onChange={(e) => {
+                  setTextBoxMessage(e.target.value);
+                }}
+              ></MsgsEditorTextBox>
+              <MsgsEditorSend
+                onClick={(e) => {
+                  sendMessage();
+                }}
+              >
+                <IoMdSend color="white" size={35}></IoMdSend>{" "}
+              </MsgsEditorSend>
             </MsgsEditor>
           </MainRight>
         </MainBody>
       )}
-
+      {/* <IoMdSend color="white" size={40}></IoMdSend> */}
       {/* Modal for Registration */}
-
       <Modal
         isOpen={registerModal}
         onRequestClose={closeRegisterModal}
@@ -916,9 +958,7 @@ function App() {
           </FailureInfoBox>
         </ModalContainer>
       </Modal>
-
       {/* Modal for Login */}
-
       <Modal
         isOpen={loginModal}
         onRequestClose={closeLoginModal}
