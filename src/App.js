@@ -544,7 +544,6 @@ display: flex;
 
 
 const LeftMessage = styled.div`
-
   background-color: #202c33;
   color: white;
   margin: 5px 0px;
@@ -554,19 +553,12 @@ const LeftMessage = styled.div`
   max-width: 60%;
   padding:5px;
   float: left;
-  
-
-
-
-
-
 `;
 
 const RightMessage = styled.div`
   padding-left: 10px;
   background-color: #128c72;
   margin: 5px 0px;
-
   float: right;
   margin-right: 5%;
   border-radius: 10px;
@@ -583,16 +575,20 @@ const BlockAndUnBlockContainer = styled.div`
 `
 
 const BlockButton = styled.button`
-margin-left:10px;
+  margin-left: 10px;
+
   height: 30px;
   padding: 5px;
   border: 1px solid white;
   background-color: red;
   border-radius: 10px;
-  color:white;
+  color: white;
+ 
+  
+  
 `;
 
-const UnBlockButton = styled.div`
+const UnBlockButton = styled.button`
 margin-left: 10px;
 
 height:30px;
@@ -626,7 +622,7 @@ function App() {
   
   const [login, setLogin] = useState(0);
   const [guest, setGuest] = useState(0);
-  const [blockOrNot, setBlockOrNot] = useState(false);
+  const [blockOrNot, setBlockOrNot] = useState(true);
   const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
 
 
@@ -676,14 +672,14 @@ function App() {
   
   const Login = () => {
     
-    console.log(number);
-    console.log(password);
+    /* console.log(number); */
+    /* console.log(password); */
     axios.post(`http://localhost:9090/knk/login?number=${number}&password=${password}`)
       .then((res) => {
-        console.log(res);
+        /* console.log(res); */
         if (res.data!==0) {
-          console.log("check1")
-          console.log(res.data);
+          /* console.log("check1") */
+          /* console.log(res.data); */
           closeLoginModal();
           setLogin(res.data);
 
@@ -705,8 +701,8 @@ function App() {
   
   const Register = () => {
 
-    console.log(number);
-    console.log(password);
+    /* console.log(number); */
+    /* console.log(password); */
     axios.post(
       `http://localhost:9090/knk/register?number=${number}&password=${password}`
     )
@@ -715,16 +711,16 @@ function App() {
         /* true or false */
         /* setRegisterInfo(res.data); */
         if (res.data===1) {
-          console.log("check1")
-          console.log(res.data);
+          /* console.log("check1") */
+          /* console.log(res.data); */
           
           closeRegisterModal();
           openLoginModal();
           
         }
         else {
-          console.log("check2")
-          console.log(res.data);
+          /* console.log("check2") */
+          /* console.log(res.data); */
           setRegisterInfo("user already existed")
 
 
@@ -746,15 +742,29 @@ function App() {
     /* console.log(guest);
     
     */
-    console.log(guest_num);
-    console.log(login);
+    /* console.log(guest_num); */
+    /* console.log(login); */
     
     const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
     setmessagesDataOneToOne(res.data);
     console.log(res);
     setGuest(guest_num);
-    console.log(typeof(login))
+    console.log(typeof (login))
+    const res1 = await axios.get(
+      `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest_num}`
+    );
+    setBlockOrNot(res1.data);
+    /* console.log(res1.data); */
+  }
 
+
+  const BlockedOrNot = async () => {
+    const res1 = await axios.get(
+      `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest}`
+    );
+    setBlockOrNot(res1.data);
+    /* console.log(res1.data); */
+    
   }
 
 
@@ -787,7 +797,7 @@ function App() {
   /* console.log(login) */
 
   const sendMessage = async () => {
-    console.log(textBoxMessage);
+    /* console.log(textBoxMessage); */
     let msg=textBoxMessage.trim()
     if (msg.length !== 0) {
         await axios
@@ -795,10 +805,10 @@ function App() {
             `http://localhost:9090/knk/sendMessage?number=${login}&guest=${guest}&data=${msg}`
           )
           .then((res) => {
-            console.log(res.data);
+            /* console.log(res.data); */
           })
           .catch((e) => {
-            console.log(e);
+            /* console.log(e); */
           });
       
 
@@ -868,30 +878,27 @@ function App() {
               <MainRightHeaderLeft>
                 <CgProfile color="white" size="50px" />
                 <MainRightHeaderLeftName>
-                    <H4white>{guest}</H4white>
-                  </MainRightHeaderLeftName>
-                  
-                  <BlockAndUnBlockContainer>
-                    {blockOrNot ?
-                      <BlockButton>
-                      
-                        Blocking
-                      
-                      </BlockButton> :
-                      <UnBlockButton>
-                        UnBlocking
-                      
-                      
-                      </UnBlockButton>
+                  <H4white>{guest}</H4white>
+                </MainRightHeaderLeftName>
 
-                    
-                    
-                    
-                    }
+                <BlockAndUnBlockContainer>
+                  {blockOrNot ? (
+                      <UnBlockButton onClick={() => {
+                        axios.post(
+                          `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
+                        );
+                        BlockedOrNot();
 
-                    
-                    
-                  </BlockAndUnBlockContainer>
+                    }}>UnBlock</UnBlockButton>
+                  ) : (
+                      <BlockButton onClick={() => {
+                          axios.post(
+                      `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
+                        );
+                          BlockedOrNot();
+                        }}>Block</BlockButton>
+                  )}
+                </BlockAndUnBlockContainer>
               </MainRightHeaderLeft>
               <MainRightHeaderRight>
                 {login !== 0 ? (
