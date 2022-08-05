@@ -210,6 +210,8 @@ const MainRightHeader = styled.div`
 const MainRightHeaderLeft = styled.div`
 display:flex;
 flex-direction: row;
+align-items: center;
+justify-content: center;
 
 
 `
@@ -573,6 +575,36 @@ const RightMessage = styled.div`
 `;
 
 
+const BlockAndUnBlockContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+`
+
+const BlockButton = styled.button`
+margin-left:10px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid white;
+  background-color: red;
+  border-radius: 10px;
+  color:white;
+`;
+
+const UnBlockButton = styled.div`
+margin-left: 10px;
+
+height:30px;
+padding: 5px;
+border:1px solid white;
+background-color: green;
+border-radius: 10px;
+color:white;
+
+
+`
+
 
 
 
@@ -594,6 +626,7 @@ function App() {
   
   const [login, setLogin] = useState(0);
   const [guest, setGuest] = useState(0);
+  const [blockOrNot, setBlockOrNot] = useState(false);
   const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
 
 
@@ -625,6 +658,21 @@ function App() {
      };
      RecentMessages();
    }, [login]);
+  
+  /* setTimeout(async () => {
+    if (guest !== 0) {
+      if (login !== 0) {
+        await updateMessages();
+      }
+    }
+    
+  }, 7000); */
+  
+  
+
+  
+  
+  
   
   const Login = () => {
     
@@ -697,24 +745,23 @@ function App() {
   
     /* console.log(guest);
     
-    
     */
     console.log(guest_num);
     console.log(login);
     
-
-
     const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
     setmessagesDataOneToOne(res.data);
     console.log(res);
     setGuest(guest_num);
     console.log(typeof(login))
 
+  }
 
 
-
-
-
+  const updateMessages = async() => {
+    const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest}`)
+    setmessagesDataOneToOne(res.data);
+  
   }
 
 
@@ -757,6 +804,7 @@ function App() {
 
 
     }
+    updateMessages();
    
     }
 
@@ -820,8 +868,30 @@ function App() {
               <MainRightHeaderLeft>
                 <CgProfile color="white" size="50px" />
                 <MainRightHeaderLeftName>
-                  <p>name here</p>
-                </MainRightHeaderLeftName>
+                    <H4white>{guest}</H4white>
+                  </MainRightHeaderLeftName>
+                  
+                  <BlockAndUnBlockContainer>
+                    {blockOrNot ?
+                      <BlockButton>
+                      
+                        Blocking
+                      
+                      </BlockButton> :
+                      <UnBlockButton>
+                        UnBlocking
+                      
+                      
+                      </UnBlockButton>
+
+                    
+                    
+                    
+                    }
+
+                    
+                    
+                  </BlockAndUnBlockContainer>
               </MainRightHeaderLeft>
               <MainRightHeaderRight>
                 {login !== 0 ? (
