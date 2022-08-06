@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { CgProfile } from "react-icons/cg"
+import { CgLogOut, CgProfile } from "react-icons/cg"
 // import { AiOutlineVideoCamera } from "react-icons/ai"
 // import {IoCallOutline} from "react-icons/io5"
 // import { IoSearchSharp } from "react-icons/io5"
@@ -325,6 +325,7 @@ align-items: center;
 const ModalInput = styled.input`
   width: 80%;
   height: 40px;
+  color:white;
   border-radius: 15px;
   border: 1px solid white;
   background-color: #333;
@@ -674,14 +675,20 @@ function App() {
     
     /* console.log(number); */
     /* console.log(password); */
-    axios.post(`http://localhost:9090/knk/login?number=${number}&password=${password}`)
+    axios.post(`http://localhost:9090/knk/HashLogin?number=${number}&password=${password}`)
       .then((res) => {
         /* console.log(res); */
         if (res.data!==0) {
           /* console.log("check1") */
           /* console.log(res.data); */
           closeLoginModal();
-          setLogin(res.data);
+          sessionStorage.setItem("number", res.data);
+          setGuest(0);
+
+          /* setLogin(res.data); */
+          /* setLofin */
+
+          /* setLogin(1); */
 
         }
         else {
@@ -704,7 +711,7 @@ function App() {
     /* console.log(number); */
     /* console.log(password); */
     axios.post(
-      `http://localhost:9090/knk/register?number=${number}&password=${password}`
+      `http://localhost:9090/knk/Hashing?number=${number}&password=${password}`
     )
       .then((res) => {
         console.log(res);
@@ -794,6 +801,16 @@ function App() {
   function closeLoginModal() {
     setLoginModal(false);
   }
+
+  const Logout = () => {
+    setLogin(0);
+    sessionStorage.removeItem("number");
+
+  }
+
+
+
+
   /* console.log(login) */
 
   const sendMessage = async () => {
@@ -810,13 +827,38 @@ function App() {
           .catch((e) => {
             /* console.log(e); */
           });
+      setTextBoxMessage("");
       
 
 
     }
     updateMessages();
    
-    }
+  }
+  
+  const SettingLogin = () => {
+    /* axios.get("http://localhost:9090/knk/NumberFromJwt"); */
+
+   axios.get("http://localhost:9090/knk/NumberFromJwt", {
+      headers: {
+        number:sessionStorage.getItem("number"), //the token is a variable which holds the token
+      },
+   }).then((res) => {
+     
+     const nameL = res.data.slice(8, res.data.length - 3);
+     setLogin(parseInt(nameL))
+     console.log(res.data);
+      
+    })
+
+
+  }
+
+  SettingLogin();
+
+
+
+  
 
 
 
@@ -908,7 +950,7 @@ function App() {
                       <ImProfile color="white"></ImProfile>
                       {login}
                     </ProfileButton>
-                    <Button onClick={() => setLogin(0)}>Logout</Button>
+                    <Button onClick={() => Logout()}>Logout</Button>
                   </ButtonsContainer>
                 ) : (
                   <ButtonsContainer>
@@ -971,7 +1013,8 @@ function App() {
             </div>
 
             <MsgsEditor>
-              <MsgsEditorTextBox
+                <MsgsEditorTextBox
+                  val={textBoxMessage}
                 onChange={(e) => {
                   setTextBoxMessage(e.target.value);
                 }}
