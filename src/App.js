@@ -174,6 +174,7 @@ align-items: center;
 height: 100%;
 flex:4;
 border-bottom : 0.5px solid gray;
+cursor: pointer;
 
 
 
