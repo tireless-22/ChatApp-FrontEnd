@@ -630,7 +630,10 @@ function App() {
   const [guest, setGuest] = useState(0);
   const [blockOrNot, setBlockOrNot] = useState(true);
   const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
-  
+  const [oneTwoOne, setOneTwoOne] = useState(true);
+  const [guestGroup, setGuestGroup] = useState(0);
+  const [messagesInGroup, setMessageInGroup] = useState();
+
 
 
 
@@ -639,7 +642,7 @@ function App() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [registerInfo, setRegisterInfo] = useState("");
-  const [loginInfo, setLoginInfo] = useState(""); 
+
   const [textBoxMessage, setTextBoxMessage] = useState("");
 
 
@@ -660,6 +663,21 @@ function App() {
        setRecentMessages(res.data);
      };
      RecentMessages();
+   }, [login]);
+  
+  
+  
+    
+   const [recentGrps, setRecentGrps] = useState();
+
+   useEffect(() => {
+     const RecentGrps = async () => {
+       const res = await axios.get(
+         `http://localhost:9090/knk/recentGroups?number=${login}`
+       );
+       setRecentGrps(res.data);
+     };
+     RecentGrps();
    }, [login]);
   
   /* setTimeout(async () => {
@@ -719,7 +737,7 @@ function App() {
         }
         else {
           console.log("check2")
-          setLoginInfo("please check your credentials")
+          /* setLoginInfo("please check your credentials") */
           
         }
     })
@@ -770,14 +788,26 @@ function App() {
     
   }
 
-  const onChat=async(guest_num) => {
-  
+
+  const onChatGrps = async (guest_grps) => {
     /* console.log(guest);
-    
     */
     /* console.log(guest_num); */
     /* console.log(login); */
-    
+    const res = await axios.get(
+      `http://localhost:9090/knk/messageInGroups?guest_group=${guest_grps}`
+    );
+    setMessageInGroup(res.data);
+    console.log(res.data);
+    console.log(guest_grps);
+    setGuestGroup(guest_grps); 
+  };
+
+  const onChat=async(guest_num) => {
+    /* console.log(guest);
+    */
+    /* console.log(guest_num); */
+    /* console.log(login); */
     const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
     setmessagesDataOneToOne(res.data);
     console.log(res);
@@ -899,55 +929,97 @@ function App() {
         <MainBody>
           <MainLeft>
             <MainLeftHeader>
-              <OneToOneDiv>1-1 Chats</OneToOneDiv>
-              <GroupsDiv>Group Chats</GroupsDiv>
+              <OneToOneDiv
+                onClick={() => {
+                  setOneTwoOne(true);
+                }}
+              >
+                1-1 Chats
+              </OneToOneDiv>
+              <GroupsDiv
+                onClick={() => {
+                  setOneTwoOne(false);
+                }}
+              >
+                Group Chats
+              </GroupsDiv>
             </MainLeftHeader>
             <SeachbarDiv>
               <InputBox placeholder=" Search your contacts here"></InputBox>
             </SeachbarDiv>
 
-            <ChatsBody>
-              {recentMessages.map((d) => (
-                <ChatCard
-                  onClick={() => {
-                    onChat(d);
-                  }}
-                >
-                  <ChatCardProfile>
-                    <CgProfile size={50} />
-                  </ChatCardProfile>
-                  <ChatCardNumber>
-                    <H4white>{d}</H4white>
-                  </ChatCardNumber>
-                </ChatCard>
-              ))}
-            </ChatsBody>
-            </MainLeft>
-            
+            {oneTwoOne ? (
+              <ChatsBody>
+                {recentMessages.map((d) => (
+                  <ChatCard
+                    onClick={() => {
+                      onChat(d);
+                    }}
+                  >
+                    <ChatCardProfile>
+                      <CgProfile size={50} />
+                    </ChatCardProfile>
+                    <ChatCardNumber>
+                      <H4white>{d}</H4white>
+                    </ChatCardNumber>
+                  </ChatCard>
+                ))}
+              </ChatsBody>
+            ) : (
+              <ChatsBody>
+                {recentGrps.map((d) => (
+                  <ChatCard
+                    onClick={() => {
+                      onChatGrps(d);
+                    }}
+                  >
+                    <ChatCardProfile>
+                      <CgProfile size={50} />
+                    </ChatCardProfile>
+                    <ChatCardNumber>
+                      <H4white>{d}</H4white>
+                    </ChatCardNumber>
+                  </ChatCard>
+                ))}
+              </ChatsBody>
+            )}
+          </MainLeft>
+
           <MainRight>
             <MainRightHeader>
               <MainRightHeaderLeft>
                 <CgProfile color="white" size="50px" />
                 <MainRightHeaderLeftName>
-                  <H4white>{guest}</H4white>
+                  {oneTwoOne ? (
+                    <H4white>{guest}</H4white>
+                  ) : (
+                    <H4white>{guestGroup}</H4white>
+                  )}
                 </MainRightHeaderLeftName>
 
                 <BlockAndUnBlockContainer>
                   {blockOrNot ? (
-                      <UnBlockButton onClick={() => {
+                    <UnBlockButton
+                      onClick={() => {
                         axios.post(
                           `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
                         );
                         BlockedOrNot();
-
-                    }}>UnBlock</UnBlockButton>
+                      }}
+                    >
+                      UnBlock
+                    </UnBlockButton>
                   ) : (
-                      <BlockButton onClick={() => {
-                          axios.post(
-                      `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
+                    <BlockButton
+                      onClick={() => {
+                        axios.post(
+                          `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
                         );
-                          BlockedOrNot();
-                        }}>Block</BlockButton>
+                        BlockedOrNot();
+                      }}
+                    >
+                      Block
+                    </BlockButton>
                   )}
                 </BlockAndUnBlockContainer>
               </MainRightHeaderLeft>
@@ -982,6 +1054,7 @@ function App() {
                 )}
               </MainRightHeaderRight>
             </MainRightHeader>
+
             <div
               style={{
                 overflowX: "hidden",
@@ -996,34 +1069,60 @@ function App() {
                 flexDirection: "column",
               }}
             >
-              <MsgsBody>
-                {guest !== 0 ? (
-                  <MessagesAll>
-                    {messagesDataOneToOne.map((msg) => (
-                      <div>
-                        {parseInt(msg.sender_id) === login ? (
-                          <RightMessage>
-                            <H4white>{msg.data}</H4white>
-                          </RightMessage>
-                        ) : (
-                          <LeftMessage>
-                            <H4white>{msg.data}</H4white>
-                          </LeftMessage>
-                        )}
-                      </div>
-                    ))}
-                  </MessagesAll>
-                ) : (
-                  <SomeThingMessage>
-                    <h1>Hello there</h1>
-                  </SomeThingMessage>
-                )}
-              </MsgsBody>
+              {oneTwoOne ? (
+                <MsgsBody>
+                  {guest !== 0 ? (
+                    <MessagesAll>
+                      {messagesDataOneToOne.map((msg) => (
+                        <div>
+                          {parseInt(msg.sender_id) === login ? (
+                            <RightMessage>
+                              <H4white>{msg.data}</H4white>
+                            </RightMessage>
+                          ) : (
+                            <LeftMessage>
+                              <H4white>{msg.data}</H4white>
+                            </LeftMessage>
+                          )}
+                        </div>
+                      ))}
+                    </MessagesAll>
+                  ) : (
+                    <SomeThingMessage>
+                      <h1>Hello there</h1>
+                    </SomeThingMessage>
+                  )}
+                </MsgsBody>
+              ) : (
+                <MsgsBody>
+                  {guestGroup !== 0 ? (
+                    <MessagesAll>
+                      {messagesInGroup.map((msg) => (
+                        <div>
+                          {parseInt(msg.sender_id) === login ? (
+                            <RightMessage>
+                              <H4white>{msg.msg_data}</H4white>
+                            </RightMessage>
+                          ) : (
+                            <LeftMessage>
+                              <H4white>{msg.msg_data}</H4white>
+                            </LeftMessage>
+                          )}
+                        </div>
+                      ))}
+                    </MessagesAll>
+                  ) : (
+                    <SomeThingMessage>
+                      <h1>Hello there</h1>
+                    </SomeThingMessage>
+                  )}
+                </MsgsBody>
+              )}
             </div>
 
             <MsgsEditor>
-                <MsgsEditorTextBox
-                  val={textBoxMessage}
+              <MsgsEditorTextBox
+                val={textBoxMessage}
                 onChange={(e) => {
                   setTextBoxMessage(e.target.value);
                 }}
