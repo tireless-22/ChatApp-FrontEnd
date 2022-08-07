@@ -813,10 +813,10 @@ function App() {
     console.log(res);
     setGuest(guest_num);
     console.log(typeof (login))
-    const res1 = await axios.get(
+    /* const res1 = await axios.get(
       `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest_num}`
-    );
-    setBlockOrNot(res1.data);
+    ); */
+    /* setBlockOrNot(res1.data); */
     /* console.log(res1.data); */
   }
 
@@ -836,6 +836,13 @@ function App() {
     setmessagesDataOneToOne(res.data);
   
   }
+
+   const updateGroupMessages = async () => {
+    const res = await axios.get(
+      `http://localhost:9090/knk/messageInGroups?guest_group=${guestGroup}`
+    );
+    setMessageInGroup(res.data);
+   };
 
 
 
@@ -890,6 +897,27 @@ function App() {
     }
     updateMessages();
    
+  }
+
+  const sendGroupMessage = async () => {
+    let msg = textBoxMessage.trim();
+    if (msg.length !== 0) {
+      await axios.post(
+        `http://localhost:9090/knk/sendGroupMessage?number=${login}&guest_group=${guestGroup}&data=${msg}`
+      )
+        .then((res) => {
+        console.log("successfull")
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+    }
+    updateGroupMessages();
+    
+
+
+
+
   }
   
  
@@ -994,34 +1022,13 @@ function App() {
                     <H4white>{guest}</H4white>
                   ) : (
                     <H4white>{guestGroup}</H4white>
-                  )}
-                </MainRightHeaderLeftName>
+                    )}
+                    
 
-                <BlockAndUnBlockContainer>
-                  {blockOrNot ? (
-                    <UnBlockButton
-                      onClick={() => {
-                        axios.post(
-                          `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
-                        );
-                        BlockedOrNot();
-                      }}
-                    >
-                      UnBlock
-                    </UnBlockButton>
-                  ) : (
-                    <BlockButton
-                      onClick={() => {
-                        axios.post(
-                          `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
-                        );
-                        BlockedOrNot();
-                      }}
-                    >
-                      Block
-                    </BlockButton>
-                  )}
-                </BlockAndUnBlockContainer>
+                  </MainRightHeaderLeftName>
+                
+
+                
               </MainRightHeaderLeft>
               <MainRightHeaderRight>
                 {login !== 0 ? (
@@ -1101,10 +1108,12 @@ function App() {
                         <div>
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
+                              <H4white>{msg.sender_id}</H4white>
                               <H4white>{msg.msg_data}</H4white>
                             </RightMessage>
                           ) : (
-                            <LeftMessage>
+                              <LeftMessage>
+                                <H4white>{msg.sender_id}</H4white>
                               <H4white>{msg.msg_data}</H4white>
                             </LeftMessage>
                           )}
@@ -1123,13 +1132,22 @@ function App() {
             <MsgsEditor>
               <MsgsEditorTextBox
                 val={textBoxMessage}
-                onChange={(e) => {
+                  onChange={(e) => {
+                  
                   setTextBoxMessage(e.target.value);
                 }}
               ></MsgsEditorTextBox>
               <MsgsEditorSend
-                onClick={(e) => {
-                  sendMessage();
+                  onClick={(e) => {
+                    
+                      oneTwoOne ?
+                        sendMessage() :
+                        sendGroupMessage()
+                        
+                    
+                    
+                    
+                 
                 }}
               >
                 <IoMdSend color="white" size={35}></IoMdSend>{" "}
