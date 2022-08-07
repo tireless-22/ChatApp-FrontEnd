@@ -15,7 +15,7 @@ import axios from 'axios';
 import {AiOutlineSend} from "react-icons/ai"
 import {IoMdSend} from "react-icons/io"
 import CoverImagePhoto from "./Images/coverCheck.jpg"
-
+import CoverPhoto from "./Images/coverPhoto.jpg"
 import {BsFillPlusCircleFill} from "react-icons/bs"
 
 
@@ -113,6 +113,7 @@ align-items: center;
 justify-content: center;
 background-color: black;
 border-bottom: 1px solid white;
+cursor: pointer;
 
 /* flex:1; */
 
@@ -453,14 +454,7 @@ flex-direction:row;
 
 `
 
-const CoverPhoto = styled.div`
-display: flex;
-flex:7;
 
-
-
-
-`
 
 const CoverImage = styled.img`
 height: 100vh;
@@ -471,23 +465,26 @@ width: 100%;
 `
 
 const CoverRegisterAndLogin = styled.div`
-  flex: 2;
+  /* flex: 2; */
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #3a3b3c;
+  /* background-color: #3a3b3c; */
   flex-direction: column;
 `;
 
 const CoverLoginButton = styled.button`
-  width: 90%;
+  /* width: 50%; */
+  width:500px;
   height: 50px;
   border-radius: 15px;
   color: white;
   background-color: #128c72;
 `;
 const CoverRegisterButton = styled.button`
-  width: 90%;
+  /* width: 50%; */
+  width: 500px;
+  justify-content: center;
   height: 50px;
   border-radius: 15px;
   color: white;
@@ -615,6 +612,28 @@ color:white;
 
 
 `
+
+const HeadingDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  /* background-color: red; */
+`;
+
+const Heading = styled.div`
+  text-align: center;
+
+  /* text-transform: uppercase; */
+  font-size: 72px;
+  letter-spacing: 1px;
+  color: #fff;
+
+  display: grid;
+  /* grid-template-columns: 1fr auto 1fr; */
+  /* grid-template-rows: 16px 0; */
+  grid-gap: 22px;
+`;
 
 
 
@@ -944,28 +963,39 @@ function App() {
   return (
     <MainContainer>
       {login === 0 ? (
-        <CoverPage>
-          <CoverPhoto>
-            <CoverImage src={CoverImagePhoto} />
-          </CoverPhoto>
+        <div
+          style={{
+            flex: 11,
 
+            backgroundImage: `url(${CoverPhoto})`,
+            width: "100%",
+            justifyContent: "center",
+
+            position: "static",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <HeadingDiv>
+            <Heading>CHAT APP</Heading>
+          </HeadingDiv>
           <CoverRegisterAndLogin>
             <CoverRegisterButton
               onClick={() => {
                 openRegisterModal();
               }}
             >
-              Register
+              <H3white>Register</H3white>
             </CoverRegisterButton>
             <CoverLoginButton
               onClick={() => {
                 openLoginModal();
               }}
             >
-              Login
+              <H3white>Login</H3white>
             </CoverLoginButton>
           </CoverRegisterAndLogin>
-        </CoverPage>
+        </div>
       ) : (
         <MainBody>
           <MainLeft>
