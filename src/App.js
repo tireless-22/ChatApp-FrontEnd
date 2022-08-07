@@ -696,7 +696,8 @@ function App() {
   const [guestGroup, setGuestGroup] = useState(0);
   const [messagesInGroup, setMessageInGroup] = useState();
   const [convModal, setConvModal] = useState(false);
-  const [theme, setTheme] = useState(false);
+  const [addGrpModal, setAddGrpModal] = useState(false);
+  
 
 
 
@@ -949,6 +950,18 @@ function App() {
     setConvModal(false);
   }
 
+  function openAddGroup() {
+    setAddGrpModal(true);
+
+  }
+  function closeAddGroup() {
+    setAddGrpModal(false);
+
+
+  }
+
+
+
 
   const StartConversation =async () => {
     /* first we have check if the user existed with that name or not */
@@ -971,23 +984,14 @@ function App() {
         RecentMessages();
         closeStartCoversation();
 
-
-
-
-
       }
-
-
-
 
     })
       .catch((e) => {
         console.log(e);
     })
 
-    
-
-  }
+    }
 
 
 
@@ -1023,7 +1027,7 @@ function App() {
         `http://localhost:9090/knk/sendGroupMessage?number=${login}&guest_group=${guestGroup}&data=${msg}`
       )
         .then((res) => {
-        console.log("successfull")
+          console.log("successfull")
         })
         .catch((e) => {
           console.log(e);
@@ -1031,13 +1035,21 @@ function App() {
     }
     updateGroupMessages();
     setTextBoxMessage("");
+  }
+
+
+
+  function AddGroup() {
 
     
+      
 
 
 
 
-  }
+
+
+    }
   
  
 
@@ -1116,7 +1128,10 @@ function App() {
                 <H4white>Start New Conversation</H4white>
               </SeachbarDiv>
             ) : (
-              <SeachbarDiv>
+                  <SeachbarDiv onClick={() => {
+                    openAddGroup();
+                    
+              }}>
                 <BsFillPlusCircleFill color="white"></BsFillPlusCircleFill>
                 <H4white>Create a group</H4white>
               </SeachbarDiv>
@@ -1249,8 +1264,6 @@ function App() {
                         <div>
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
-                           
-                              
                               <H4white>{msg.msg_data}</H4white>
                             </RightMessage>
                           ) : (
@@ -1420,6 +1433,45 @@ function App() {
           </FailureInfoBox>
         </ModalContainer2>
       </Modal>
+
+      <Modal
+        isOpen={addGrpModal}
+        onRequestClose={closeAddGroup}
+        style={customStyles}
+      >
+        <ModalContainer2>
+          <ModalHeadingContainer>
+            <H3white>Create a Group</H3white>
+          </ModalHeadingContainer>
+          <LabelContainer>
+            <H5white>Group Name</H5white>
+          </LabelContainer>
+          <ModalInputContainer>
+            <ModalInput
+              onChange={(e) => {
+                setGuestGroup(e.target.value)
+                
+              }}
+            ></ModalInput>
+          </ModalInputContainer>
+
+          <ModalButttonContainer>
+            <ModalButton
+              onClick={() => {
+                AddGroup();
+              }}
+            >
+              Submit
+            </ModalButton>
+          </ModalButttonContainer>
+          <FailureInfoBox>
+            <FailureParagraph>{registerInfo}</FailureParagraph>
+          </FailureInfoBox>
+        </ModalContainer2>
+      </Modal>
+
+
+      
     </MainContainer>
   );
 }
