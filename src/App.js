@@ -43,6 +43,7 @@ height: 100%;
 const MainLeft = styled.div`
   flex: 3;
   display: flex;
+  min-width: 250px;
   flex-direction: column;
   background-color: black;
   height: 100vh;
@@ -292,6 +293,17 @@ flex-direction: column;
 
 
 `
+const ModalContainer2 = styled.div`
+  display: flex;
+  height: 250px;
+  width: 280px;
+  background-color: black;
+  flex-direction: column;
+  /* border: 1px solid white; */
+`;
+
+
+
 
 const ModalHeadingContainer = styled.div`
 display: flex;
@@ -480,6 +492,7 @@ const CoverLoginButton = styled.button`
   border-radius: 15px;
   color: white;
   background-color: #128c72;
+  cursor:pointer;
 `;
 const CoverRegisterButton = styled.button`
   /* width: 50%; */
@@ -490,6 +503,7 @@ const CoverRegisterButton = styled.button`
   color: white;
   background-color: #128c72;
   margin-bottom: 40px;
+  cursor: pointer;
 `;
 
 const MsgsBody = styled.div`
@@ -537,6 +551,7 @@ const MsgsEditorSend = styled.div`
   height: 45px;
   width: 40px;
   margin-left: 10px;
+  cursor: pointer;
 `;
 
 
@@ -665,6 +680,7 @@ function App() {
   const [oneTwoOne, setOneTwoOne] = useState(true);
   const [guestGroup, setGuestGroup] = useState(0);
   const [messagesInGroup, setMessageInGroup] = useState();
+  const [convModal, setConvModal] = useState(false);
 
 
 
@@ -760,6 +776,7 @@ function App() {
           sessionStorage.setItem("number", res.data);
           setGuest(0);
           SettingLogin();
+          closeLoginModal();
 
           /* setLogin(res.data); */
           /* setLofin */
@@ -769,11 +786,12 @@ function App() {
         }
         else {
           console.log("check2")
+          setRegisterInfo("please check your credentials");
           /* setLoginInfo("please check your credentials") */
           
         }
     })
-     closeLoginModal();
+     
      /* setLogin(); */
 
 
@@ -903,6 +921,52 @@ function App() {
 
   }
 
+  function openStartConversation() {
+    setConvModal(true);
+  }
+  function closeStartCoversation() {
+    setConvModal(false);
+  }
+
+
+  const StartConversation =async () => {
+    /* first we have check if the user existed with that name or not */
+    
+    await axios.post(
+      `http://localhost:9090/knk/startConversation?number=${login}&guest=${number}`
+    ).then((res) => {
+      console.log(res.data);
+      if (res.data === 0) {
+        setRegisterInfo("Check the number");
+        
+      }
+      else {
+        const RecentMessages = async () => {
+          const res = await axios.get(
+            `http://localhost:9090/knk/recent?number=${login}`
+          );
+          setRecentMessages(res.data);
+        };
+        RecentMessages();
+        closeStartCoversation();
+
+
+
+
+
+      }
+
+
+
+
+    })
+      .catch((e) => {
+        console.log(e);
+    })
+
+    
+
+  }
 
 
 
@@ -985,14 +1049,14 @@ function App() {
                 openRegisterModal();
               }}
             >
-              <H3white>Register</H3white>
+              <H4white>Register</H4white>
             </CoverRegisterButton>
             <CoverLoginButton
               onClick={() => {
                 openLoginModal();
               }}
             >
-              <H3white>Login</H3white>
+              <H4white>Login</H4white>
             </CoverLoginButton>
           </CoverRegisterAndLogin>
         </div>
@@ -1017,7 +1081,11 @@ function App() {
             </MainLeftHeader>
 
             {oneTwoOne ? (
-              <SeachbarDiv>
+              <SeachbarDiv
+                onClick={() => {
+                  openStartConversation();
+                }}
+              >
                 <BsFillPlusCircleFill color="white"></BsFillPlusCircleFill>
                 <H4white>Start New Conversation</H4white>
               </SeachbarDiv>
@@ -1282,7 +1350,46 @@ function App() {
               Login
             </ModalButton>
           </ModalButttonContainer>
+
+          <FailureInfoBox>
+            <FailureParagraph>{registerInfo}</FailureParagraph>
+          </FailureInfoBox>
         </ModalContainer>
+      </Modal>
+
+      <Modal
+        isOpen={convModal}
+        onRequestClose={closeStartCoversation}
+        style={customStyles}
+      >
+        <ModalContainer2>
+          <ModalHeadingContainer>
+            <H3white>Start Conversation</H3white>
+          </ModalHeadingContainer>
+          <LabelContainer>
+            <H5white>Phone Number</H5white>
+          </LabelContainer>
+          <ModalInputContainer>
+            <ModalInput
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
+            ></ModalInput>
+          </ModalInputContainer>
+
+          <ModalButttonContainer>
+            <ModalButton
+              onClick={() => {
+                StartConversation();
+              }}
+            >
+              Submit
+            </ModalButton>
+          </ModalButttonContainer>
+          <FailureInfoBox>
+            <FailureParagraph>{registerInfo}</FailureParagraph>
+          </FailureInfoBox>
+        </ModalContainer2>
       </Modal>
     </MainContainer>
   );
