@@ -618,6 +618,10 @@ color:white;
 
 function App() {
 
+
+
+  
+
  
 
 
@@ -626,6 +630,7 @@ function App() {
   const [guest, setGuest] = useState(0);
   const [blockOrNot, setBlockOrNot] = useState(true);
   const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
+  
 
 
 
@@ -665,6 +670,25 @@ function App() {
     }
     
   }, 7000); */
+
+
+   const SettingLogin = () => {
+     /* axios.get("http://localhost:9090/knk/NumberFromJwt"); */
+
+     axios
+       .get("http://localhost:9090/knk/NumberFromJwt", {
+         headers: {
+           number: sessionStorage.getItem("number"), //the token is a variable which holds the token
+         },
+       })
+       .then((res) => {
+         const nameL = res.data.slice(8, res.data.length - 3);
+         setLogin(parseInt(nameL));
+         console.log(res.data);
+       });
+   };
+
+   SettingLogin();
   
   
 
@@ -685,6 +709,7 @@ function App() {
           closeLoginModal();
           sessionStorage.setItem("number", res.data);
           setGuest(0);
+          SettingLogin();
 
           /* setLogin(res.data); */
           /* setLofin */
@@ -837,25 +862,7 @@ function App() {
    
   }
   
-  const SettingLogin = () => {
-    /* axios.get("http://localhost:9090/knk/NumberFromJwt"); */
-
-   axios.get("http://localhost:9090/knk/NumberFromJwt", {
-      headers: {
-        number:sessionStorage.getItem("number"), //the token is a variable which holds the token
-      },
-   }).then((res) => {
-     
-     const nameL = res.data.slice(8, res.data.length - 3);
-     setLogin(parseInt(nameL))
-     console.log(res.data);
-      
-    })
-
-
-  }
-
-  SettingLogin();
+ 
 
 
 
@@ -915,7 +922,8 @@ function App() {
                 </ChatCard>
               ))}
             </ChatsBody>
-          </MainLeft>
+            </MainLeft>
+            
           <MainRight>
             <MainRightHeader>
               <MainRightHeaderLeft>
