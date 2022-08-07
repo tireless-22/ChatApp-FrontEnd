@@ -767,7 +767,7 @@ function App() {
        .then((res) => {
          const nameL = res.data.slice(8, res.data.length - 3);
          setLogin(parseInt(nameL));
-         console.log(res.data);
+         /* console.log(res.data); */
        });
    };
 
@@ -803,7 +803,7 @@ function App() {
 
         }
         else {
-          console.log("check2")
+          /* console.log("check2") */
           setRegisterInfo("please check your credentials");
           /* setLoginInfo("please check your credentials") */
           
@@ -826,7 +826,7 @@ function App() {
       `http://localhost:9090/knk/Hashing?number=${number}&password=${password}`
     )
       .then((res) => {
-        console.log(res);
+        /* console.log(res); */
         /* true or false */
         /* setRegisterInfo(res.data); */
         if (res.data===1) {
@@ -866,8 +866,8 @@ function App() {
       `http://localhost:9090/knk/messageInGroups?guest_group=${guest_grps}`
     );
     setMessageInGroup(res.data);
-    console.log(res.data);
-    console.log(guest_grps);
+    /* console.log(res.data); */
+    /* console.log(guest_grps); */
     setGuestGroup(guest_grps); 
   };
 
@@ -878,9 +878,9 @@ function App() {
     /* console.log(login); */
     const res = await axios.get(`http://localhost:9090/knk/messagesOneToOne?number=${login}&guest=${guest_num}`)
     setmessagesDataOneToOne(res.data);
-    console.log(res);
+    /* console.log(res); */
     setGuest(guest_num);
-    console.log(typeof (login))
+    /* console.log(typeof (login)) */
     /* const res1 = await axios.get(
       `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest_num}`
     ); */
@@ -969,7 +969,7 @@ function App() {
     await axios.post(
       `http://localhost:9090/knk/startConversation?number=${login}&guest=${number}`
     ).then((res) => {
-      console.log(res.data);
+      /* console.log(res.data); */
       if (res.data === 0) {
         setRegisterInfo("Check the number");
         
@@ -1027,7 +1027,7 @@ function App() {
         `http://localhost:9090/knk/sendGroupMessage?number=${login}&guest_group=${guestGroup}&data=${msg}`
       )
         .then((res) => {
-          console.log("successfull")
+          /* console.log("successfull") */
         })
         .catch((e) => {
           console.log(e);
@@ -1039,25 +1039,45 @@ function App() {
 
 
 
-  function AddGroup() {
+  const AddGroup = async () => {
+    /* console.log(login); */
+    /* console.log(guestGroup); */
+    axios.get(
+      `http://localhost:9090/knk/createAGroup?number=${login}&groupName=${guestGroup}`
+    ).then((res) => {
+      /* console.log(res.data); */
+      if (res.data === 0) {
+        setRegisterInfo(res.data);
+        
+      }
+      else {
+        closeAddGroup();
+        
+
+        
+      }
+      
+       const RecentGrps = async () => {
+         const res = await axios.get(
+           `http://localhost:9090/knk/recentGroups?number=${login}`
+         );
+         setRecentGrps(res.data);
+       };
+       RecentGrps();
+
+
+
+
+    })
+      .catch((e) => {
+        console.log(e);
+    })
+
+
 
     
-      
-
-
-
-
-
-
+    
     }
-  
- 
-
-
-
-  
-
-
 
   return (
     <MainContainer>
