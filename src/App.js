@@ -16,7 +16,7 @@ import {AiOutlineSend} from "react-icons/ai"
 import {IoMdSend} from "react-icons/io"
 import CoverImagePhoto from "./Images/coverCheck.jpg"
 
-
+import {BsFillPlusCircleFill} from "react-icons/bs"
 
 
 const MainContainer = styled.div`
@@ -66,6 +66,7 @@ height: 100%;
 justify-content: center;
 align-items: center;
 color:white;
+cursor:pointer;
 
 
 
@@ -84,7 +85,7 @@ flex:1;
 justify-content: center;
 align-items: center;
 color:white;
-
+cursor:pointer;
 
 
 `
@@ -107,10 +108,12 @@ background-color:gray;
 
 const SeachbarDiv = styled.div`
 display: flex;
+flex-direction: row;
 align-items: center;
 justify-content: center;
 background-color: black;
 border-bottom: 1px solid white;
+
 /* flex:1; */
 
 height:50px ;
@@ -376,6 +379,16 @@ margin-left:26px
 
 
 `
+
+const H5white2 = styled.h5`
+  font-size: 15px;
+  font-weight: 200;
+  margin: 10px;
+  color:white;
+  /* margin-bottom: 5px; */
+  /* margin-left: 26px; */
+`;
+
 
 
 
@@ -972,9 +985,18 @@ function App() {
                 Group Chats
               </GroupsDiv>
             </MainLeftHeader>
-            <SeachbarDiv>
-              <InputBox placeholder=" Search your contacts here"></InputBox>
-            </SeachbarDiv>
+
+            {oneTwoOne ? (
+              <SeachbarDiv>
+                <BsFillPlusCircleFill color="white"></BsFillPlusCircleFill>
+                <H4white>Start New Conversation</H4white>
+              </SeachbarDiv>
+            ) : (
+              <SeachbarDiv>
+                <BsFillPlusCircleFill color="white"></BsFillPlusCircleFill>
+                <H4white>Create a group</H4white>
+              </SeachbarDiv>
+            )}
 
             {oneTwoOne ? (
               <ChatsBody>
@@ -1022,13 +1044,8 @@ function App() {
                     <H4white>{guest}</H4white>
                   ) : (
                     <H4white>{guestGroup}</H4white>
-                    )}
-                    
-
-                  </MainRightHeaderLeftName>
-                
-
-                
+                  )}
+                </MainRightHeaderLeftName>
               </MainRightHeaderLeft>
               <MainRightHeaderRight>
                 {login !== 0 ? (
@@ -1108,12 +1125,12 @@ function App() {
                         <div>
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
-                              <H4white>{msg.sender_id}</H4white>
+                              <H5white2>{msg.sender_id}</H5white2>
                               <H4white>{msg.msg_data}</H4white>
                             </RightMessage>
                           ) : (
-                              <LeftMessage>
-                                <H4white>{msg.sender_id}</H4white>
+                            <LeftMessage>
+                              <H5white2>{msg.sender_id}</H5white2>
                               <H4white>{msg.msg_data}</H4white>
                             </LeftMessage>
                           )}
@@ -1132,22 +1149,13 @@ function App() {
             <MsgsEditor>
               <MsgsEditorTextBox
                 val={textBoxMessage}
-                  onChange={(e) => {
-                  
+                onChange={(e) => {
                   setTextBoxMessage(e.target.value);
                 }}
               ></MsgsEditorTextBox>
               <MsgsEditorSend
-                  onClick={(e) => {
-                    
-                      oneTwoOne ?
-                        sendMessage() :
-                        sendGroupMessage()
-                        
-                    
-                    
-                    
-                 
+                onClick={(e) => {
+                  oneTwoOne ? sendMessage() : sendGroupMessage();
                 }}
               >
                 <IoMdSend color="white" size={35}></IoMdSend>{" "}
