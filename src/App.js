@@ -273,6 +273,7 @@ color:white;
 border:1px solid white;
 border-radius: 10px;
 margin:0px 10px;
+cursor:pointer;
 
 
 
@@ -373,6 +374,7 @@ const ModalButton = styled.button`
   border-radius: 15px;
   margin:0px 0px 30px 0px;
   color:white;
+  cursor: pointer;
 
 `;
 
@@ -933,6 +935,10 @@ function App() {
   const Logout = () => {
     setLogin(0);
     sessionStorage.removeItem("number");
+    setGuest(0);
+    /* setMessageInGroup();
+    setRecentGrps();
+    setRecentMessages(); */
 
   }
 
@@ -1024,6 +1030,8 @@ function App() {
         })
     }
     updateGroupMessages();
+    setTextBoxMessage("");
+
     
 
 
@@ -1267,7 +1275,7 @@ function App() {
 
             <MsgsEditor>
               <MsgsEditorTextBox
-                val={textBoxMessage}
+                value={textBoxMessage}
                 onChange={(e) => {
                   setTextBoxMessage(e.target.value);
                 }}
