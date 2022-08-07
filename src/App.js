@@ -19,6 +19,17 @@ import CoverPhoto from "./Images/coverPhoto.jpg"
 import {BsFillPlusCircleFill} from "react-icons/bs"
 
 
+ const colors = [
+   "#53bdeb",
+   "#e26ab6",
+   "#00a884",
+   "#a5b337",
+   "#fc9775",
+   "a791ff",
+   "#ffbc38",
+ ];
+  
+
 const MainContainer = styled.div`
   display:flex;
   flex-direction: column;
@@ -47,7 +58,7 @@ const MainLeft = styled.div`
   flex-direction: column;
   background-color: black;
   height: 100vh;
-  border-right: 2px white solid;
+  border-right: 2px #555 solid;
 `;
 const MainLeftHeader = styled.div`
 height:60px;
@@ -60,18 +71,16 @@ background-color: #202c33;
 align-items: center;
 `
 const OneToOneDiv = styled.div`
-display: flex;
-flex: 1;
-border-right:1px solid white;
-height: 100%;
-justify-content: center;
-align-items: center;
-color:white;
-cursor:pointer;
-
-
-
-`
+  display: flex;
+  flex: 1;
+  border-right: 1px solid #ccc;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  background-color:${(props) => ( props.oneTwoOne ? "#128c72" : "#202c33" )};
+`;
 const OneToOneButton = -styled.button`
 height: 30px;
 
@@ -81,15 +90,15 @@ height: 30px;
 `
 
 const GroupsDiv = styled.div`
-display: flex;
-flex:1;
-justify-content: center;
-align-items: center;
-color:white;
-cursor:pointer;
-
-
-`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 100%;
+  cursor: pointer;
+  background-color: ${(props) => (props.oneTwoOne ? "#202c33" :"#128c72" )};
+`;
 const GroupButton = styled.button`
 height: 30px;
 
@@ -113,7 +122,7 @@ flex-direction: row;
 align-items: center;
 justify-content: center;
 background-color: black;
-border-bottom: 1px solid white;
+border-bottom: 1px solid #555;
 cursor: pointer;
 
 /* flex:1; */
@@ -331,6 +340,7 @@ const H4white = styled.h3`
 `;
 
 
+
 const ModalInputContainer = styled.div`
 
 display:flex;
@@ -397,10 +407,14 @@ const H5white2 = styled.h5`
   font-size: 15px;
   font-weight: 200;
   margin: 10px;
-  color:white;
+  color:${props=>colors[props.sender%6]};
   /* margin-bottom: 5px; */
   /* margin-left: 26px; */
 `;
+
+
+
+
 
 
 
@@ -666,8 +680,7 @@ const Heading = styled.div`
 function App() {
 
 
-
-  
+ 
 
  
 
@@ -681,6 +694,7 @@ function App() {
   const [guestGroup, setGuestGroup] = useState(0);
   const [messagesInGroup, setMessageInGroup] = useState();
   const [convModal, setConvModal] = useState(false);
+  const [theme, setTheme] = useState(false);
 
 
 
@@ -776,6 +790,7 @@ function App() {
           sessionStorage.setItem("number", res.data);
           setGuest(0);
           SettingLogin();
+          setLogin(number);
           closeLoginModal();
 
           /* setLogin(res.data); */
@@ -1065,13 +1080,16 @@ function App() {
           <MainLeft>
             <MainLeftHeader>
               <OneToOneDiv
+                oneTwoOne={oneTwoOne}
                 onClick={() => {
                   setOneTwoOne(true);
                 }}
               >
                 1-1 Chats
               </OneToOneDiv>
+
               <GroupsDiv
+                oneTwoOne={oneTwoOne}
                 onClick={() => {
                   setOneTwoOne(false);
                 }}
@@ -1223,12 +1241,15 @@ function App() {
                         <div>
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
-                              <H5white2>{msg.sender_id}</H5white2>
+                           
+                              
                               <H4white>{msg.msg_data}</H4white>
                             </RightMessage>
                           ) : (
                             <LeftMessage>
-                              <H5white2>{msg.sender_id}</H5white2>
+                              <H5white2 sender={msg.sender_id}>
+                                {msg.sender_id}
+                              </H5white2>
                               <H4white>{msg.msg_data}</H4white>
                             </LeftMessage>
                           )}
