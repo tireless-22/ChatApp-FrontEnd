@@ -17,7 +17,7 @@ import {IoMdSend} from "react-icons/io"
 import CoverImagePhoto from "./Images/coverCheck.jpg"
 import CoverPhoto from "./Images/coverPhoto.jpg"
 import {BsFillPlusCircleFill} from "react-icons/bs"
-
+import { TiTick } from "react-icons/ti";
 
  const colors = [
    "#53bdeb",
@@ -697,6 +697,7 @@ function App() {
   const [messagesInGroup, setMessageInGroup] = useState();
   const [convModal, setConvModal] = useState(false);
   const [addGrpModal, setAddGrpModal] = useState(false);
+  const [lastSeenId, setLastSeenId] = useState(0);
   
 
 
@@ -886,10 +887,81 @@ function App() {
     );
     setBlockOrNot(res1.data);
     /* console.log(res1.data); */
+
+
+
+    const lastMsgId = messagesDataOneToOne[messagesDataOneToOne.length - 1].msg_id;
+    console.log(login)
+    console.log(guest);
+    console.log(lastMsgId);
+
+    axios.post(
+      `http://localhost:9090/knk/updationOfLastSeen?userMain=${login}&user=${guest}&msgId=${lastMsgId}`
+    ).then((res) => {
+      console.log("messageId updated")
+    })
+      .catch((e) => {
+        console.log(e);
+      })
+    
+
+    /* setLastSeenId */
+
+    axios.get(
+      `http://localhost:9090/knk/gettingLastSeenMsg?userMain=${guest}&user=${login}`
+    ).then((res) => {
+
+      setLastSeenId(res.data);
+      console.log(res.data);
+
+    })
+      .catch((e) => {
+        console.log(e);
+        
+      
+      })
+    
+    console.log(lastSeenId);
+    
+
+    
+    
+
+    
+
   }
 
 
-  const BlockedOrNot = async () => {
+
+
+  const UnBlock = async () => {
+                            
+    await axios.post(
+      `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
+    ).then((res) => {
+      console.log(res.data);
+      console.log("form block funtion")
+    })
+    BlockedOrNot();
+
+
+  }
+
+  const Block = async => {
+     axios.post(
+       `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
+     ).then((res) => {
+       console.log(res.data);
+     })
+     BlockedOrNot();
+    
+
+  }
+
+
+
+
+  const BlockedOrNot =  async () => {
     console.log("chcek")
     const res1 = await axios.get(
       `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest}`
@@ -917,6 +989,8 @@ function App() {
 
 
   function openRegisterModal() {
+    setRegisterInfo("")
+    
     setRegisterModal(true);
   }
 
@@ -927,6 +1001,7 @@ function App() {
 
 
   function openLoginModal() {
+        setRegisterInfo("");
     setLoginModal(true);
     // setLogin(true);
   }
@@ -946,6 +1021,7 @@ function App() {
   }
 
   function openStartConversation() {
+        setRegisterInfo("");
     setConvModal(true);
   }
   function closeStartCoversation() {
@@ -953,6 +1029,7 @@ function App() {
   }
 
   function openAddGroup() {
+        setRegisterInfo("");
     setAddGrpModal(true);
 
   }
@@ -1161,27 +1238,22 @@ function App() {
             )}
 
             {oneTwoOne ? (
-                <ChatsBody>
-                  {recentMessages &&
-                    recentMessages.map((d) => (
-                  <ChatCard
-                    onClick={() => {
-                      onChat(d);
-                    }}
-                  >
-                    <ChatCardProfile>
-                      <CgProfile size={50} />
-                    </ChatCardProfile>
-                    <ChatCardNumber>
-                      <H4white>{d}</H4white>
-                    </ChatCardNumber>
-                  </ChatCard>
-                ))
-                  
-                  
-                  
-                  }
-                
+              <ChatsBody>
+                {recentMessages &&
+                  recentMessages.map((d) => (
+                    <ChatCard
+                      onClick={() => {
+                        onChat(d);
+                      }}
+                    >
+                      <ChatCardProfile>
+                        <CgProfile size={50} />
+                      </ChatCardProfile>
+                      <ChatCardNumber>
+                        <H4white>{d}</H4white>
+                      </ChatCardNumber>
+                    </ChatCard>
+                  ))}
               </ChatsBody>
             ) : (
               <ChatsBody>
@@ -1218,24 +1290,16 @@ function App() {
                   <BlockAndUnBlockContainer>
                     {blockOrNot ? (
                       <UnBlockButton
-                          onClick={async() => {
-                            
-                          await axios.post(
-                            `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
-                          );
-                          BlockedOrNot();
+                        onClick={() => {
+                          UnBlock();
                         }}
                       >
                         UnBlock
                       </UnBlockButton>
                     ) : (
                       <BlockButton
-                            onClick={async() => {
-                              console.log("check block")
-                          await axios.post(
-                            `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
-                          )
-                          BlockedOrNot();
+                        onClick={() => {
+                          Block();
                         }}
                       >
                         Block
@@ -1300,6 +1364,11 @@ function App() {
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
                               <H4white>{msg.data}</H4white>
+                              {lastSeenId > msg.msg_id ? (
+                                <TiTick color="blue"></TiTick>
+                              ) : (
+                                <TiTick></TiTick>
+                              )}
                             </RightMessage>
                           ) : (
                             <LeftMessage>
