@@ -18,6 +18,9 @@ import CoverImagePhoto from "./Images/coverCheck.jpg"
 import CoverPhoto from "./Images/coverPhoto.jpg"
 import {BsFillPlusCircleFill} from "react-icons/bs"
 import { TiTick } from "react-icons/ti";
+import InputEmoji from "react-input-emoji";
+
+
 
  const colors = [
    "#53bdeb",
@@ -689,11 +692,11 @@ function App() {
 
   
   const [login, setLogin] = useState(0);
-  const [guest, setGuest] = useState(0);
+  const [guest, setGuest] = useState("ChatApp");
   const [blockOrNot, setBlockOrNot] = useState(true);
   const [messagesDataOneToOne, setmessagesDataOneToOne] = useState();
   const [oneTwoOne, setOneTwoOne] = useState(true);
-  const [guestGroup, setGuestGroup] = useState(0);
+  const [guestGroup, setGuestGroup] = useState("ChatApp Groups");
   const [messagesInGroup, setMessageInGroup] = useState();
   const [convModal, setConvModal] = useState(false);
   const [addGrpModal, setAddGrpModal] = useState(false);
@@ -710,6 +713,7 @@ function App() {
   const [registerInfo, setRegisterInfo] = useState("");
 
   const [textBoxMessage, setTextBoxMessage] = useState("");
+  const theme = "dark";
 
 
    /* function Login() {
@@ -792,7 +796,8 @@ function App() {
           /* console.log(res.data); */
           closeLoginModal();
           sessionStorage.setItem("number", res.data);
-          setGuest(0);
+          setGuest("ChatApp");
+          setGuestGroup("ChatApp Groups");
           SettingLogin();
           setLogin(number);
           closeLoginModal();
@@ -1013,7 +1018,8 @@ function App() {
   const Logout = () => {
     setLogin(0);
     sessionStorage.removeItem("number");
-    setGuest(0);
+    setGuest("ChatApp");
+    setGuestGroup("ChatApp Groups");
     /* setMessageInGroup();
     setRecentGrps();
     setRecentMessages(); */
@@ -1076,13 +1082,13 @@ function App() {
 
   /* console.log(login) */
 
-  const sendMessage = async () => {
+  const sendMessage = async (text) => {
     /* console.log(textBoxMessage); */
     let msg=textBoxMessage.trim()
     if (msg.length !== 0) {
         await axios
           .post(
-            `http://localhost:9090/knk/sendMessage?number=${login}&guest=${guest}&data=${msg}`
+            `http://localhost:9090/knk/sendMessage?number=${login}&guest=${guest}&data=${text}`
           )
           .then((res) => {
             /* console.log(res.data); */
@@ -1099,11 +1105,11 @@ function App() {
    
   }
 
-  const sendGroupMessage = async () => {
+  const sendGroupMessage = async (text) => {
     let msg = textBoxMessage.trim();
     if (msg.length !== 0) {
       await axios.post(
-        `http://localhost:9090/knk/sendGroupMessage?number=${login}&guest_group=${guestGroup}&data=${msg}`
+        `http://localhost:9090/knk/sendGroupMessage?number=${login}&guest_group=${guestGroup}&data=${text}`
       )
         .then((res) => {
           /* console.log("successfull") */
@@ -1156,7 +1162,14 @@ function App() {
 
     
     
-    }
+  }
+  
+
+
+  function handleOnEnter(text) {
+    console.log("enter", text);
+    oneTwoOne ? sendMessage(text) : sendGroupMessage(text);
+  }
 
   return (
     <MainContainer>
@@ -1357,7 +1370,7 @@ function App() {
             >
               {oneTwoOne ? (
                 <MsgsBody>
-                  {guest !== 0 ? (
+                  {guest !== "ChatApp" ? (
                     <MessagesAll>
                       {messagesDataOneToOne.map((msg) => (
                         <div>
@@ -1379,14 +1392,14 @@ function App() {
                       ))}
                     </MessagesAll>
                   ) : (
-                    <SomeThingMessage>
-                      <h1>Hello there</h1>
-                    </SomeThingMessage>
+                    <LeftMessage>
+                      <H4white>Welcome to one to one chat</H4white>
+                    </LeftMessage>
                   )}
                 </MsgsBody>
               ) : (
                 <MsgsBody>
-                  {guestGroup !== 0 ? (
+                  {guestGroup !== "ChatApp Groups" ? (
                     <MessagesAll>
                       {messagesInGroup.map((msg) => (
                         <div>
@@ -1406,28 +1419,22 @@ function App() {
                       ))}
                     </MessagesAll>
                   ) : (
-                    <SomeThingMessage>
-                      <h1>Hello there</h1>
-                    </SomeThingMessage>
+                    <LeftMessage>
+                      <H4white>Welcome to Group chat</H4white>
+                    </LeftMessage>
                   )}
                 </MsgsBody>
               )}
             </div>
 
             <MsgsEditor>
-              <MsgsEditorTextBox
+              <InputEmoji
                 value={textBoxMessage}
-                onChange={(e) => {
-                  setTextBoxMessage(e.target.value);
-                }}
-              ></MsgsEditorTextBox>
-              <MsgsEditorSend
-                onClick={(e) => {
-                  oneTwoOne ? sendMessage() : sendGroupMessage();
-                }}
-              >
-                <IoMdSend color="white" size={35}></IoMdSend>{" "}
-              </MsgsEditorSend>
+                onChange={setTextBoxMessage}
+                cleanOnEnter
+                onEnter={handleOnEnter}
+                placeholder="Type a message"
+              />
             </MsgsEditor>
           </MainRight>
         </MainBody>
