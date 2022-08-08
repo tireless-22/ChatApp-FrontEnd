@@ -518,7 +518,7 @@ const CoverRegisterButton = styled.button`
   border-radius: 15px;
   color: white;
   background-color: #128c72;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   cursor: pointer;
 `;
 
@@ -881,20 +881,22 @@ function App() {
     /* console.log(res); */
     setGuest(guest_num);
     /* console.log(typeof (login)) */
-    /* const res1 = await axios.get(
+    const res1 = await axios.get(
       `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest_num}`
-    ); */
-    /* setBlockOrNot(res1.data); */
+    );
+    setBlockOrNot(res1.data);
     /* console.log(res1.data); */
   }
 
 
   const BlockedOrNot = async () => {
+    console.log("chcek")
     const res1 = await axios.get(
       `http://localhost:9090/knk/blockOrNot?number=${login}&guest=${guest}`
     );
     setBlockOrNot(res1.data);
-    /* console.log(res1.data); */
+
+    console.log(res1.data);
     
   }
 
@@ -1148,18 +1150,20 @@ function App() {
                 <H4white>Start New Conversation</H4white>
               </SeachbarDiv>
             ) : (
-                  <SeachbarDiv onClick={() => {
-                    openAddGroup();
-                    
-              }}>
+              <SeachbarDiv
+                onClick={() => {
+                  openAddGroup();
+                }}
+              >
                 <BsFillPlusCircleFill color="white"></BsFillPlusCircleFill>
                 <H4white>Create a group</H4white>
               </SeachbarDiv>
             )}
 
             {oneTwoOne ? (
-              <ChatsBody>
-                {recentMessages.map((d) => (
+                <ChatsBody>
+                  {recentMessages &&
+                    recentMessages.map((d) => (
                   <ChatCard
                     onClick={() => {
                       onChat(d);
@@ -1172,7 +1176,12 @@ function App() {
                       <H4white>{d}</H4white>
                     </ChatCardNumber>
                   </ChatCard>
-                ))}
+                ))
+                  
+                  
+                  
+                  }
+                
               </ChatsBody>
             ) : (
               <ChatsBody>
@@ -1205,7 +1214,37 @@ function App() {
                     <H4white>{guestGroup}</H4white>
                   )}
                 </MainRightHeaderLeftName>
+                {oneTwoOne && (
+                  <BlockAndUnBlockContainer>
+                    {blockOrNot ? (
+                      <UnBlockButton
+                          onClick={async() => {
+                            
+                          await axios.post(
+                            `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
+                          );
+                          BlockedOrNot();
+                        }}
+                      >
+                        UnBlock
+                      </UnBlockButton>
+                    ) : (
+                      <BlockButton
+                            onClick={async() => {
+                              console.log("check block")
+                          await axios.post(
+                            `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
+                          )
+                          BlockedOrNot();
+                        }}
+                      >
+                        Block
+                      </BlockButton>
+                    )}
+                  </BlockAndUnBlockContainer>
+                )}
               </MainRightHeaderLeft>
+
               <MainRightHeaderRight>
                 {login !== 0 ? (
                   <ButtonsContainer>
@@ -1469,8 +1508,7 @@ function App() {
           <ModalInputContainer>
             <ModalInput
               onChange={(e) => {
-                setGuestGroup(e.target.value)
-                
+                setGuestGroup(e.target.value);
               }}
             ></ModalInput>
           </ModalInputContainer>
@@ -1489,9 +1527,6 @@ function App() {
           </FailureInfoBox>
         </ModalContainer2>
       </Modal>
-
-
-      
     </MainContainer>
   );
 }
