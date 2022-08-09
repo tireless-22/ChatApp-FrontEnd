@@ -1,5 +1,5 @@
 .react-input-emoji--container{
-  background-color: #303056 !important;
+  background-color: #fff !important;
 }
 
 
@@ -8,6 +8,43 @@
 }
 
 .react-input-emoji--input{
-  color:white !important;
+  color:black !important;
 
 }
+
+
+.ReactModal__Content--after-open{
+  background-color: #fff !important;
+
+
+}
+
+
+.emoji-mart-dark {
+    color: #fff;
+    border-color: #555453;
+    background-color: #fff !important;
+}
+
+
+
+.emoji-mart-dark .emoji-mart-category-label span {
+    background-color: white !important;
+    color: #fff;
+}
+
+
+.emoji-mart-dark .emoji-mart-category-label span {
+    background-color: #222;
+    color: #000 !important
+}
+
+.emoji-mart-dark .emoji-mart-search input {
+    color:black !important ;
+    border-color: #555453 !important;
+    background-color: white !important;
+}
+
+
+
+

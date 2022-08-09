@@ -27,6 +27,8 @@ import Five from "./Images/5.png";
 import Six from "./Images/6.png";
 import Seven from "./Images/7.png";
 import People from "./Images/people.png"
+import { useRef } from "react"
+
 
 
 const Images = [
@@ -98,6 +100,13 @@ const MainLeftHeader = styled.div`
   /* justify-content: center; */
   align-items: center;
 `;
+const H4white = styled.h3`
+  color: white;
+  font-weight: 400;
+  font-size: 20px;
+  border: 0px;
+  margin: 5px;
+`;
 const OneToOneDiv = styled.div`
   display: flex;
   flex: 1;
@@ -107,7 +116,8 @@ const OneToOneDiv = styled.div`
   align-items: center;
   color: white;
   cursor: pointer;
-  background-color: ${(props) => (props.oneTwoOne ? "#1fe0ba" : "#303056")};
+
+  background-color: ${(props) => (props.oneTwoOne ? "#1b1a47" : "#303056")};
   color: ${(props) => (props.oneTwoOne ? "black" : "white")};
 `;
 const OneToOneButton = -styled.button`
@@ -126,8 +136,8 @@ const GroupsDiv = styled.div`
   color: white;
   height: 100%;
   cursor: pointer;
-  background-color: ${(props) => (props.oneTwoOne ? "#303056" : "#1fe0ba")};
-  color: ${(props) => (props.oneTwoOne ? "white" : "black")};
+  background-color: ${(props) => (props.oneTwoOne ? "#303056" : "#1b1a47")};
+  color: white;
 `;
 const GroupButton = styled.button`
 height: 30px;
@@ -152,6 +162,7 @@ const SeachbarDiv = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #1b1a47;
+  color: #1b1a47;
   border-bottom: 1px solid #555;
   cursor: pointer;
 
@@ -205,6 +216,10 @@ const ChatCard = styled.div`
 
   /* Modification2 */
   border-bottom: 0.5px solid gray;
+
+
+
+
 `;
 const ChatCardProfile = styled.div`
 display: flex;
@@ -276,7 +291,7 @@ const MainRightHeaderRight = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-color: #1fe0ba;
+  background-color: #1b1a47;
   /* Modification4 */
   /* border-top-left-radius:10px ; */
   /* border-bottom-left-radius:10px; */
@@ -314,24 +329,22 @@ const ButtonsContainer = styled.div`
 `;
 
 const Button = styled.button`
-padding:10px 15px;
-background-color: #1B1A47;
-color:white;
-border:1px solid white;
-border-radius: 10px;
-margin:0px 10px;
-cursor:pointer;
+  padding: 10px 15px;
+  background-color: #303056;
+  color: white;
+  border-width: 0px ;
 
-
-
-
-`
+  border-radius: 10px;
+  margin: 0px 10px;
+  cursor: pointer;
+`;
 
 const ProfileButton = styled.div`
 display: flex;
 flex-direction: left;
 justify-content: center;
 align-items: center;
+
 
 `;
 
@@ -342,7 +355,7 @@ const ModalContainer = styled.div`
   display: flex;
   height: 350px;
   width: 280px;
-  background-color: #1b1a47;
+  background-color: white;
   flex-direction: column;
   /* border: 1px solid white; */
 `;
@@ -350,7 +363,7 @@ const ModalContainer2 = styled.div`
   display: flex;
   height: 250px;
   width: 280px;
-  background-color: #1b1a47;
+  background-color: white;
   flex-direction: column;
   /* border: 1px solid white; */
 `;
@@ -368,21 +381,14 @@ top:0px;
 
 
 const H3white = styled.h3`
-  color: white;
+  color: black;
   font-weight: 400;
   font-size: 24px;
   border: 0px;
   margin-bottom: 3px;
   margin-left: 5px;
 `;
-const H4white = styled.h3`
-  color: white;
-  font-weight: 400;
-  font-size: 20px;
-  border: 0px;
-  margin:5px;
 
-`;
 
 const H4black = styled.h3`
   color: black;
@@ -428,11 +434,12 @@ align-items: center;
 const ModalInput = styled.input`
   width: 80%;
   height: 40px;
-  color:white;
+  color:black;
   border-radius: 15px;
   border: 1px solid white;
-  background-color: #333;
+  background-color: white;
   margin:0px 0px 30px 0px;
+  border:1px solid gray;
 `;
 const ModalButttonContainer = styled.div`
 display: flex;
@@ -442,7 +449,7 @@ align-items: center;
 
 const ModalButton = styled.button`
   padding: 15px 10 px;
-  background-color: #1fe0ba;
+  background-color: #1b1a47;
   border: 1px solid white;
   width: 80%;
   height: 40px;
@@ -580,7 +587,7 @@ const CoverLoginButton = styled.button`
   height: 50px;
   border-radius: 15px;
   color: black;
-  background-color: #1fe0ba;
+  background-color: #303056;
   cursor: pointer;
 `;
 const CoverRegisterButton = styled.button`
@@ -590,7 +597,7 @@ const CoverRegisterButton = styled.button`
   height: 50px;
   border-radius: 15px;
   color: black;
-  background-color: #1fe0ba;
+  background-color: #303056;
   margin-bottom: 20px;
   cursor: pointer;
 `;
@@ -660,27 +667,30 @@ display: flex;
 
 
 const LeftMessage = styled.div`
-  background-color: #303056;
-  color: white;
+  background-color: white;
+  color: black;
   margin: 5px 0px;
   padding-right: 10px;
+  
   border-radius: 10px;
   margin-left: 5%;
   max-width: 60%;
   padding: 5px;
   float: left;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 12%);
 `;
 
 const RightMessage = styled.div`
   /* padding-left: 10px; */
   padding: 5px;
-  background-color: #1fe0ba;
+  background-color: white;
   margin: 5px 0px;
   float: right;
   margin-right: 5%;
   border-radius: 10px;
 
   max-width: 60%;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 12%);
 `;
 
 
@@ -724,6 +734,7 @@ const Heading = styled.div`
   font-size: 72px;
   letter-spacing: 1px;
   color: #fff;
+  color: #1b1a47;
 
   display: grid;
   /* grid-template-columns: 1fr auto 1fr; */
@@ -751,7 +762,7 @@ function App() {
 
  
 
-
+  const messagesEndRef = useRef(null);
   
   const [login, setLogin] = useState(0);
   const [guest, setGuest] = useState("ChatApp");
@@ -782,6 +793,10 @@ function App() {
      closeLoginModal();
      setLogin(true);
    } */
+
+
+
+  
   
   
   
@@ -820,6 +835,17 @@ function App() {
     }
     
   }, 7000); */
+
+
+
+  
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messagesDataOneToOne]);
 
 
    const SettingLogin = () => {
@@ -1240,7 +1266,7 @@ function App() {
           style={{
             flex: 11,
 
-            backgroundImage: `url(${CoverPhoto})`,
+            /* backgroundImage: `url(${CoverPhoto})`, */
             width: "100%",
             justifyContent: "center",
 
@@ -1279,7 +1305,7 @@ function App() {
                   setOneTwoOne(true);
                 }}
               >
-                1-1 Chats
+                <H4white>1-1 Chats</H4white>
               </OneToOneDiv>
 
               <GroupsDiv
@@ -1288,7 +1314,7 @@ function App() {
                   setOneTwoOne(false);
                 }}
               >
-                Group Chats
+                <H4white>Group Chats</H4white>
               </GroupsDiv>
             </MainLeftHeader>
 
@@ -1401,7 +1427,7 @@ function App() {
                     {/* if logged in */}
                     <ProfileButton>
                       <Logo src={Images[login % 7]} />
-                      <H4black>{login}</H4black>
+                      <H4white2>{login}</H4white2>
                     </ProfileButton>
                     <Button onClick={() => Logout()}>Logout</Button>
                   </ButtonsContainer>
@@ -1432,8 +1458,8 @@ function App() {
                 overflowX: "hidden",
 
                 flex: 11,
+                backgroundColor: "#f6f7f8",
 
-                backgroundImage: `url(${ChatBackground})`,
                 width: "100%",
 
                 position: "static",
@@ -1452,16 +1478,20 @@ function App() {
                               <RightMessage>
                                 <H4white3>{msg.data}</H4white3>
                                 {lastSeenId > msg.msg_id ? (
-                                  <TiTick color="blue"></TiTick>
+                                  <TiTick
+                                    className="hoverClass"
+                                    color="blue"
+                                  ></TiTick>
                                 ) : (
-                                  <TiTick></TiTick>
+                                  <TiTick className="hoverClass"></TiTick>
                                 )}
                               </RightMessage>
                             ) : (
                               <LeftMessage>
-                                <H4white>{msg.data}</H4white>
+                                <H4white3>{msg.data}</H4white3>
                               </LeftMessage>
                             )}
+                            <div ref={messagesEndRef} />
                           </div>
                         ))}
                     </MessagesAll>
@@ -1486,7 +1516,7 @@ function App() {
                               <H5white2 sender={msg.sender_id}>
                                 {msg.sender_id}
                               </H5white2>
-                              <H4white2>{msg.msg_data}</H4white2>
+                              <H4white3>{msg.msg_data}</H4white3>
                             </LeftMessage>
                           )}
                         </div>
