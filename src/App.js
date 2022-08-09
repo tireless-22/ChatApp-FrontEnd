@@ -14,11 +14,35 @@ import Modal from "react-modal"
 import axios from 'axios';
 import {AiOutlineSend} from "react-icons/ai"
 import {IoMdSend} from "react-icons/io"
-import CoverImagePhoto from "./Images/coverCheck.jpg"
+// import CoverImagePhoto from "./Images/coverCheck.jpg"
 import CoverPhoto from "./Images/coverPhoto.jpg"
 import {BsFillPlusCircleFill} from "react-icons/bs"
 import { TiTick } from "react-icons/ti";
 import InputEmoji from "react-input-emoji";
+import One from "./Images/1.png";
+import Two from "./Images/2.png";
+import Three from "./Images/3.png";
+import Four from "./Images/4.png";
+import Five from "./Images/5.png";
+import Six from "./Images/6.png";
+import Seven from "./Images/7.png";
+import People from "./Images/people.png"
+
+
+const Images = [
+  One,Two,Three,Four,Five,Six,Seven
+]
+
+
+
+const Logo = styled.img`
+  width: 45px;
+  height: 45px;
+  margin-left: 10px;
+  /* margin: 15px; */
+`;
+
+
 
 
 
@@ -45,7 +69,7 @@ const MainContainer = styled.div`
 const TopGreen = styled.div`
   height: 35px;
   width: 100vw;
-  background-color: #128c72;
+  background-color: #35e3c1;
 `;
 const MainBody = styled.div`
 display: flex;
@@ -59,20 +83,21 @@ const MainLeft = styled.div`
   display: flex;
   min-width: 250px;
   flex-direction: column;
-  background-color: black;
+  background-color: #1b1a47;
   height: 100vh;
   border-right: 2px #555 solid;
 `;
 const MainLeftHeader = styled.div`
-height:60px;
-display: flex;
-flex-direction: row;
-/* justify-content: left; */
-/* flex:1; */
-background-color: #202c33;
-/* justify-content: center; */
-align-items: center;
-`
+  height: 50px;
+  /* Modification3 */
+  display: flex;
+  flex-direction: row;
+  /* justify-content: left; */
+  /* flex:1; */
+  background-color: #303056;
+  /* justify-content: center; */
+  align-items: center;
+`;
 const OneToOneDiv = styled.div`
   display: flex;
   flex: 1;
@@ -82,7 +107,8 @@ const OneToOneDiv = styled.div`
   align-items: center;
   color: white;
   cursor: pointer;
-  background-color:${(props) => ( props.oneTwoOne ? "#128c72" : "#202c33" )};
+  background-color: ${(props) => (props.oneTwoOne ? "#1fe0ba" : "#303056")};
+  color: ${(props) => (props.oneTwoOne ? "black" : "white")};
 `;
 const OneToOneButton = -styled.button`
 height: 30px;
@@ -100,7 +126,8 @@ const GroupsDiv = styled.div`
   color: white;
   height: 100%;
   cursor: pointer;
-  background-color: ${(props) => (props.oneTwoOne ? "#202c33" :"#128c72" )};
+  background-color: ${(props) => (props.oneTwoOne ? "#303056" : "#1fe0ba")};
+  color: ${(props) => (props.oneTwoOne ? "white" : "black")};
 `;
 const GroupButton = styled.button`
 height: 30px;
@@ -120,18 +147,18 @@ background-color:gray;
 `;
 
 const SeachbarDiv = styled.div`
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: center;
-background-color: black;
-border-bottom: 1px solid #555;
-cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #1b1a47;
+  border-bottom: 1px solid #555;
+  cursor: pointer;
 
-/* flex:1; */
+  /* flex:1; */
 
-height:50px ;
-`
+  height: 50px;
+`;
 
 const InputBox = styled.input`
 height: 32px;
@@ -154,7 +181,7 @@ const ChatsBody = styled.div`
   /* overflow-x: scroll; */
   overflow-x: hidden;
   /* overflow-y:hidden; */
-  background-color: #111b21;
+  background-color: #303056;
   /* -webkit-scrollbar:none ; */
   flex: 11;
   /* overflow: scroll; */
@@ -165,14 +192,19 @@ const ChatsBody = styled.div`
 `;
 
 const ChatCard = styled.div`
-  height: 70px;
-  background-color: #111b21;
+  /* #Modification1 */
+  /* height: 70px; */
+  height: 60px;
+  background-color: #303056;
   /* border-bottom:2px solid white; */
   width: 100%;
   color: white;
   display: flex;
   flex-direction: left;
   align-items: center;
+
+  /* Modification2 */
+  border-bottom: 0.5px solid gray;
 `;
 const ChatCardProfile = styled.div`
 display: flex;
@@ -190,7 +222,7 @@ display: flex;
 align-items: center;
 height: 100%;
 flex:4;
-border-bottom : 0.5px solid gray;
+
 cursor: pointer;
 
 
@@ -218,8 +250,9 @@ const MainRight = styled.div`
 `;
 
 const MainRightHeader = styled.div`
-  height: 60px;
-  background-color: #202c33;
+  height: 50px;
+  /* Modification3 */
+  background-color: #303056;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -243,9 +276,10 @@ const MainRightHeaderRight = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-color: #128c72;
-  border-top-left-radius:10px ;
-  border-bottom-left-radius:10px;
+  background-color: #1fe0ba;
+  /* Modification4 */
+  /* border-top-left-radius:10px ; */
+  /* border-bottom-left-radius:10px; */
 `;
 
 const IconDiv = styled.div`
@@ -263,6 +297,16 @@ const Linediv = styled.div`
 `
 
 
+
+const Linediv2 = styled.div`
+  background-color: white;
+  height: 70%;
+  width: 1px;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+
+
 const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -271,7 +315,7 @@ const ButtonsContainer = styled.div`
 
 const Button = styled.button`
 padding:10px 15px;
-background-color: #000;
+background-color: #1B1A47;
 color:white;
 border:1px solid white;
 border-radius: 10px;
@@ -283,34 +327,30 @@ cursor:pointer;
 
 `
 
-const ProfileButton = styled.button`
-  padding: 10px 15px;
-  background-color: #000;
-  color: white;
-  border: 1px solid white;
-  border-radius: 10px;
-  margin: 0px 10px; 
+const ProfileButton = styled.div`
+display: flex;
+flex-direction: left;
+justify-content: center;
+align-items: center;
+
 `;
 
 
 
 
 const ModalContainer = styled.div`
-display: flex;
-height: 350px;
-width: 280px;
-background-color: black;
-flex-direction: column;
-/* border: 1px solid white; */
-
-
-
-`
+  display: flex;
+  height: 350px;
+  width: 280px;
+  background-color: #1b1a47;
+  flex-direction: column;
+  /* border: 1px solid white; */
+`;
 const ModalContainer2 = styled.div`
   display: flex;
   height: 250px;
   width: 280px;
-  background-color: black;
+  background-color: #1b1a47;
   flex-direction: column;
   /* border: 1px solid white; */
 `;
@@ -328,19 +368,51 @@ top:0px;
 
 
 const H3white = styled.h3`
-color:white;
-font-weight: 400;
-font-size: 24px;
-border: 0px;
-margin:10px;
-
-`
+  color: white;
+  font-weight: 400;
+  font-size: 24px;
+  border: 0px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+`;
 const H4white = styled.h3`
   color: white;
   font-weight: 400;
   font-size: 20px;
   border: 0px;
-  margin: 10px;
+  margin:5px;
+
+`;
+
+const H4black = styled.h3`
+  color: black;
+  font-weight: 400;
+  font-size: 20px;
+  border: 0px;
+  margin: 5px;
+`;
+
+
+
+const H4white3 = styled.h3`
+  color: black;
+  font-weight: 400;
+  font-size: 16px;
+  border: 0px;
+  margin: 5px;
+`;
+
+
+
+const H4white2 = styled.h3`
+  color: white;
+  font-weight: 400;
+  font-size: 16px;
+  border: 0px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-top: 0px;
+  margin-right:5px;
 `;
 
 
@@ -370,15 +442,14 @@ align-items: center;
 
 const ModalButton = styled.button`
   padding: 15px 10 px;
-  background-color: #128c72;
+  background-color: #1fe0ba;
   border: 1px solid white;
   width: 80%;
   height: 40px;
   border-radius: 15px;
-  margin:0px 0px 30px 0px;
-  color:white;
+  margin: 0px 0px 30px 0px;
+  color: white;
   cursor: pointer;
-
 `;
 
 
@@ -411,7 +482,7 @@ margin-left:26px
 const H5white2 = styled.h5`
   font-size: 15px;
   font-weight: 200;
-  margin: 10px;
+  margin: 5px;
   color:${props=>colors[props.sender%6]};
   /* margin-bottom: 5px; */
   /* margin-left: 26px; */
@@ -427,15 +498,15 @@ const H5white2 = styled.h5`
 
 const customStyles = {
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    background: "black",
-    borderRadius:"20px",
-  
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    background: "#1B1A47",
+    borderRadius: "20px",
+
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
   },
 };
 
@@ -467,9 +538,8 @@ display:flex;
 
 const MsgTextBox = styled.div`
   height: 40px;
-  border: 1px solid black;
+  border: 1px solid #1b1a47;
   border-radius: 10px;
-  
 `;
 
 
@@ -506,12 +576,12 @@ const CoverRegisterAndLogin = styled.div`
 
 const CoverLoginButton = styled.button`
   /* width: 50%; */
-  width:500px;
+  width: 500px;
   height: 50px;
   border-radius: 15px;
-  color: white;
-  background-color: #128c72;
-  cursor:pointer;
+  color: black;
+  background-color: #1fe0ba;
+  cursor: pointer;
 `;
 const CoverRegisterButton = styled.button`
   /* width: 50%; */
@@ -519,8 +589,8 @@ const CoverRegisterButton = styled.button`
   justify-content: center;
   height: 50px;
   border-radius: 15px;
-  color: white;
-  background-color: #128c72;
+  color: black;
+  background-color: #1fe0ba;
   margin-bottom: 20px;
   cursor: pointer;
 `;
@@ -545,28 +615,28 @@ const MsgsEditor = styled.div`
   flex: 1;
   display: flex;
   flex-direction: row;
-  
+
   justify-content: left;
-  background-color: #202c33;
+  background-color: #1b1a47;
   align-items: center;
 `;
 
 const MsgsEditorTextBox = styled.input`
-margin-left:15px;
+  margin-left: 15px;
   height: 40px;
   width: 90%;
   background-color: #343f46;
   color: white;
-  border: 1px solid black;
+  border: 1px solid #1b1a47;
   border-radius: 9px;
 `;
 const MsgsEditorSend = styled.div`
   border-radius: 50%;
-  padding-left:8px ;
+  padding-left: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #128c72;
+  background-color: #1fe0ba;
   height: 45px;
   width: 40px;
   margin-left: 10px;
@@ -590,20 +660,21 @@ display: flex;
 
 
 const LeftMessage = styled.div`
-  background-color: #202c33;
+  background-color: #303056;
   color: white;
   margin: 5px 0px;
   padding-right: 10px;
   border-radius: 10px;
-  margin-left:5%;
+  margin-left: 5%;
   max-width: 60%;
-  padding:5px;
+  padding: 5px;
   float: left;
 `;
 
 const RightMessage = styled.div`
-  padding-left: 10px;
-  background-color: #128c72;
+  /* padding-left: 10px; */
+  padding: 5px;
+  background-color: #1fe0ba;
   margin: 5px 0px;
   float: right;
   margin-right: 5%;
@@ -620,29 +691,20 @@ const BlockAndUnBlockContainer = styled.div`
 
 `
 
-const BlockButton = styled.button`
-  margin-left: 10px;
+const BlockButton = styled.div`
 
-  height: 30px;
-  padding: 5px;
-  border: 1px solid white;
-  background-color: red;
-  border-radius: 10px;
   color: white;
- 
+ cursor: pointer;
   
   
 `;
 
-const UnBlockButton = styled.button`
-margin-left: 10px;
+const UnBlockButton = styled.div`
 
-height:30px;
-padding: 5px;
-border:1px solid white;
-background-color: green;
-border-radius: 10px;
+
+
 color:white;
+cursor: pointer;
 
 
 `
@@ -1260,7 +1322,7 @@ function App() {
                       }}
                     >
                       <ChatCardProfile>
-                        <CgProfile size={50} />
+                        <Logo src={Images[d % 7]} />
                       </ChatCardProfile>
                       <ChatCardNumber>
                         <H4white>{d}</H4white>
@@ -1277,7 +1339,7 @@ function App() {
                     }}
                   >
                     <ChatCardProfile>
-                      <CgProfile size={50} />
+                      <Logo src={People} />
                     </ChatCardProfile>
                     <ChatCardNumber>
                       <H4white>{d}</H4white>
@@ -1291,7 +1353,12 @@ function App() {
           <MainRight>
             <MainRightHeader>
               <MainRightHeaderLeft>
-                <CgProfile color="white" size="50px" />
+                {oneTwoOne ? (
+                  <Logo src={Images[guest % 7]} />
+                ) : (
+                  <Logo src={People} />
+                )}
+
                 <MainRightHeaderLeftName>
                   {oneTwoOne ? (
                     <H4white>{guest}</H4white>
@@ -1299,6 +1366,8 @@ function App() {
                     <H4white>{guestGroup}</H4white>
                   )}
                 </MainRightHeaderLeftName>
+
+                {oneTwoOne && <Linediv2></Linediv2>}
                 {oneTwoOne && (
                   <BlockAndUnBlockContainer>
                     {blockOrNot ? (
@@ -1307,7 +1376,9 @@ function App() {
                           UnBlock();
                         }}
                       >
-                        UnBlock
+                        <H4white style={{ textDecoration: "underline" }}>
+                          UnBlock
+                        </H4white>
                       </UnBlockButton>
                     ) : (
                       <BlockButton
@@ -1315,7 +1386,9 @@ function App() {
                           Block();
                         }}
                       >
-                        Block
+                        <H4white style={{ textDecoration: "underline" }}>
+                          Block
+                        </H4white>
                       </BlockButton>
                     )}
                   </BlockAndUnBlockContainer>
@@ -1327,8 +1400,8 @@ function App() {
                   <ButtonsContainer>
                     {/* if logged in */}
                     <ProfileButton>
-                      <ImProfile color="white"></ImProfile>
-                      {login}
+                      <Logo src={Images[login % 7]} />
+                      <H4black>{login}</H4black>
                     </ProfileButton>
                     <Button onClick={() => Logout()}>Logout</Button>
                   </ButtonsContainer>
@@ -1372,24 +1445,25 @@ function App() {
                 <MsgsBody>
                   {guest !== "ChatApp" ? (
                     <MessagesAll>
-                      {messagesDataOneToOne.map((msg) => (
-                        <div>
-                          {parseInt(msg.sender_id) === login ? (
-                            <RightMessage>
-                              <H4white>{msg.data}</H4white>
-                              {lastSeenId > msg.msg_id ? (
-                                <TiTick color="blue"></TiTick>
-                              ) : (
-                                <TiTick></TiTick>
-                              )}
-                            </RightMessage>
-                          ) : (
-                            <LeftMessage>
-                              <H4white>{msg.data}</H4white>
-                            </LeftMessage>
-                          )}
-                        </div>
-                      ))}
+                      {messagesDataOneToOne &&
+                        messagesDataOneToOne.map((msg) => (
+                          <div>
+                            {parseInt(msg.sender_id) === login ? (
+                              <RightMessage>
+                                <H4white3>{msg.data}</H4white3>
+                                {lastSeenId > msg.msg_id ? (
+                                  <TiTick color="blue"></TiTick>
+                                ) : (
+                                  <TiTick></TiTick>
+                                )}
+                              </RightMessage>
+                            ) : (
+                              <LeftMessage>
+                                <H4white>{msg.data}</H4white>
+                              </LeftMessage>
+                            )}
+                          </div>
+                        ))}
                     </MessagesAll>
                   ) : (
                     <LeftMessage>
@@ -1405,14 +1479,14 @@ function App() {
                         <div>
                           {parseInt(msg.sender_id) === login ? (
                             <RightMessage>
-                              <H4white>{msg.msg_data}</H4white>
+                              <H4white3>{msg.msg_data}</H4white3>
                             </RightMessage>
                           ) : (
                             <LeftMessage>
                               <H5white2 sender={msg.sender_id}>
                                 {msg.sender_id}
                               </H5white2>
-                              <H4white>{msg.msg_data}</H4white>
+                              <H4white2>{msg.msg_data}</H4white2>
                             </LeftMessage>
                           )}
                         </div>
