@@ -486,6 +486,16 @@ margin-left:26px
 
 `
 
+
+const H5black = styled.h5`
+  font-size: 17px;
+  font-weight: 400;
+  margin: 0px;
+  color:black;
+  margin-bottom: 10px;
+  margin-left: 26px;
+`;
+
 const H5white2 = styled.h5`
   font-size: 15px;
   font-weight: 200;
@@ -624,7 +634,7 @@ const MsgsEditor = styled.div`
   flex-direction: row;
 
   justify-content: left;
-  background-color: #1b1a47;
+  background-color: white;
   align-items: center;
 `;
 
@@ -1028,9 +1038,11 @@ function App() {
 
 
   const UnBlock = async () => {
-                            
+    console.log("checker")
+    console.log(number);
+    console.log(guest)                            
     await axios.post(
-      `http://localhost:9090/knk/unblock?number=${number}&guest=${guest}`
+      `http://localhost:9090/knk/unblock?number=${login}&guest=${guest}`
     ).then((res) => {
       console.log(res.data);
       console.log("form block funtion")
@@ -1041,8 +1053,13 @@ function App() {
   }
 
   const Block = async => {
+
+
+      console.log("checker");
+      console.log(number);
+      console.log(guest);  
      axios.post(
-       `http://localhost:9090/knk/block?number=${number}&guest=${guest}`
+       `http://localhost:9090/knk/block?number=${login}&guest=${guest}`
      ).then((res) => {
        console.log(res.data);
      })
@@ -1555,7 +1572,7 @@ function App() {
             <H3white>REGISTRATION</H3white>
           </ModalHeadingContainer>
           <LabelContainer>
-            <H5white>Phone Number</H5white>
+            <H5black>Phone Number</H5black>
           </LabelContainer>
 
           <ModalInputContainer>
@@ -1567,7 +1584,7 @@ function App() {
           </ModalInputContainer>
 
           <LabelContainer>
-            <H5white>Passwrod</H5white>
+            <H5black>Passwrod</H5black>
           </LabelContainer>
           <ModalInputContainer>
             <ModalInput
@@ -1602,7 +1619,7 @@ function App() {
             <H3white>LOGIN</H3white>
           </ModalHeadingContainer>
           <LabelContainer>
-            <H5white>Phone Number</H5white>
+            <H5black>Phone Number</H5black>
           </LabelContainer>
           <ModalInputContainer>
             <ModalInput
@@ -1612,7 +1629,7 @@ function App() {
             ></ModalInput>
           </ModalInputContainer>
           <LabelContainer>
-            <H5white>Password</H5white>
+            <H5black>Password</H5black>
           </LabelContainer>
           <ModalInputContainer>
             <ModalInput
@@ -1648,7 +1665,7 @@ function App() {
             <H3white>Start Conversation</H3white>
           </ModalHeadingContainer>
           <LabelContainer>
-            <H5white>Phone Number</H5white>
+            <H5black>Phone Number</H5black>
           </LabelContainer>
           <ModalInputContainer>
             <ModalInput
@@ -1683,7 +1700,7 @@ function App() {
             <H3white>Create a Group</H3white>
           </ModalHeadingContainer>
           <LabelContainer>
-            <H5white>Group Name</H5white>
+            <H5black>Group Name</H5black>
           </LabelContainer>
           <ModalInputContainer>
             <ModalInput
